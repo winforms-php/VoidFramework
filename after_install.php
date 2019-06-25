@@ -29,12 +29,11 @@ $parser = new VLFParser (__DIR__. \'/app.vlf\', [
     \'ignore_postobject_info\'        => true,
     \'ignore_unexpected_method_args\' => true,
 
-    \'use_caching\' => true,
+    \'use_caching\' => false,
     \'debug_mode\'  => false
 ]);
 
 $objects = VLFInterpreter::run ($parser);
-
 $APPLICATION->run ($objects[\'MainForm\']);
 ');
 
@@ -45,11 +44,11 @@ if (!file_exists (QERO_DIR .'/app/app.vlf'))
     startPosition: fspCenterScreen
 
     Button MainButton
-    bounds: [8, 8, 120, 32]
-    caption: \'Click Me!\'
+        caption: \'Click Me!\'
+        bounds: [8, 8, 120, 32]
 
-    ClickEvent:^ function ($self)
-        {
-            pre ($self);
-        }
+        ClickEvent:^ function ($self)
+            {
+                pre ($self);
+            }
 ');
