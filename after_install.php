@@ -12,43 +12,11 @@ if (!file_exists (QERO_DIR .'/start.bat'))
 '. $info['scripts']['start']);
 
 if (!is_dir (QERO_DIR .'/app'))
+{
     mkdir (QERO_DIR .'/app');
-
-if (!file_exists (QERO_DIR .'/app/start.php'))
-    file_put_contents (QERO_DIR .'/app/start.php', '<?php
     
-namespace VoidEngine;
+    dir_copy (__DIR__ .'/app_bundle', QERO_DIR .'/app');
+}
 
-const APP_DIR = __DIR__;
-chdir (APP_DIR);
-
-require __DIR__ .\'/../qero-packages/autoload.php\';
-
-$parser = new VLFParser (__DIR__. \'/app.vlf\', [
-    \'strong_line_parser\'            => false,
-    \'ignore_postobject_info\'        => true,
-    \'ignore_unexpected_method_args\' => true,
-
-    \'use_caching\' => false,
-    \'debug_mode\'  => false
-]);
-
-$objects = VLFInterpreter::run ($parser);
-$APPLICATION->run ($objects[\'MainForm\']);
-');
-
-if (!file_exists (QERO_DIR .'/app/app.vlf'))
-    file_put_contents (QERO_DIR .'/app/app.vlf', 'Form MainForm
-    caption: \'Hello, World!\'
-    size: [400, 300]
-    startPosition: fspCenterScreen
-
-    Button MainButton
-        caption: \'Click Me!\'
-        bounds: [8, 8, 120, 32]
-
-        ClickEvent:^ function ($self)
-            {
-                pre ($self);
-            }
-');
+dir_delete (__DIR__ .'/app_bundle');
+unlink (__FILE__);

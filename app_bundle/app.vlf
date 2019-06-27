@@ -1,0 +1,13 @@
+Form MainForm
+    caption: 'Hello, World!'
+    size: [400, 300]
+    startPosition: fspCenterScreen
+
+    Button MainButton
+        caption: 'Click Me!'
+        bounds: [8, 8, 120, 32]
+
+        ClickEvent:^ function ($self) use (MainForm $form)
+            {
+                pre ('Oh, '. $self->caption .' was clicked from '. $form->caption);
+            }
