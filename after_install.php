@@ -35,5 +35,5 @@ if (!is_dir (QERO_DIR .'/app'))
     dir_copy (__DIR__ .'/app_bundle', QERO_DIR .'/app');
 }
 
-dir_delete (__DIR__ .'/app_bundle');
+Qero\dir_delete (__DIR__ .'/app_bundle');
 unlink (__FILE__);
