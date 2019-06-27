@@ -1,5 +1,22 @@
 <?php
 
+function dir_copy (string $from, string $to): bool
+{
+    if (!is_dir ($from))
+        return false;
+
+    if (!is_dir ($to))
+        dir_create ($to);
+
+    foreach (array_slice (scandir ($from), 2) as $file)
+        if (is_dir ($f = $from .'/'. $file))
+            dir_copy ($f, $to .'/'. $file);
+
+        else copy ($f, $to .'/'. $file);
+
+    return true;
+}
+
 $info = file_exists (QERO_DIR .'/qero-info.json') ?
     json_decode (file_get_contents (QERO_DIR .'/qero-info.json'), true) : array ();
 
