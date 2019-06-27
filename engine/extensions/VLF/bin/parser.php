@@ -23,6 +23,12 @@ class VLFParser
      * @param string $content - VLF разметка или путь до файла разметки
      * [@param array $settings = []] - список настроек и их значений (настройка => значение)
      * 
+     * ААААААААААААААААААААААААААААААААААААААААААААААААААА
+     * ПОЧЕМУ, ПОЧЕМУ ТАК СЛОЖНА
+     * ААААААААААААААААААААААААААААА
+     * Я НИХРЕНА НЕ ПОНИМАЮ КАК, КАК Я ЭТО СДЕЛАЛ
+     * Я ПЫТАЛСЯ ПЕРЕДЕЛАТЬ ВСЁ, НО НИХРЕНА НЕ ПОЛУЧИЛОСЬ
+     * АААААААААААААААААААААААА
      */
 
     public function __construct (string $content, array $settings = [])
@@ -31,6 +37,7 @@ class VLFParser
             $content = file_get_contents ($content);
 
         // Зачем? Так надо!
+        // ДА БАГ ЭТО, НЕ ПИ%ДИ!!! И Я ПОНЯТИЯ НЕ ИМЕЮ КАК И ПОЧЕМУ!!!
         $content = "# VLF begin\n\n$content\n\n# VLF end";
 
         foreach ($settings as $name => $setting)
@@ -72,9 +79,7 @@ class VLFParser
      * @param string $content - VLF разметка
      * 
      * @return array - возвращает АСД
-     * 
      */
-
     protected function generateSyntaxTree (string $content): array
     {
         $lines          = $this->linesFilter ($untouched_lines = explode ($this->divider, $content));
@@ -108,13 +113,11 @@ class VLFParser
              * 
              *     caption: 'MainForm'
              * 
-             * Нужно для того, что-бы указатель с объекта MainButton1 спрыгнул обратно на MainForm
+             * Нужно для того, чтобы указатель с объекта MainButton1 спрыгнул обратно на MainForm
              * 
-             * subparent_link нужен цикл while для того, что-бы перебрать некоторые подобъекты, у которых в аргументах
+             * subparent_link нужен цикл while для того, чтобы перебрать некоторые подобъекты, у которых в аргументах
              * не используются ссылки на оригиналы объектов
-             * 
              */
-
             while ($current_object !== null && $tree[$current_object]['hard'] >= $height)
             {
                 $updated = false;
@@ -149,7 +152,6 @@ class VLFParser
             /**
              * Button ...
              */
-
             if (class_exists ($words[0]) || class_exists ('\VoidEngine\\'. $words[0]))
             {
                 if (!isset ($words[1]))
@@ -162,7 +164,6 @@ class VLFParser
                  * Button NewButton
                  *     text: 123
                  */
-                
                 if (isset ($links[$words[1]]))
                 {
                     $tree[$id] = [
@@ -239,7 +240,6 @@ class VLFParser
                      * Form MainForm
                      *     Button MainButton
                      */
-
                     elseif ($current_object !== null && $tree[$current_object]['hard'] < $height)
                     {
                         $tree[$id]['info']['arguments'] = [
@@ -282,7 +282,6 @@ class VLFParser
              * 
              *    SUPER COMMENT 3000
              */
-
             elseif ($words[0][0] == '#')
             {
                 $comment = $line;
@@ -311,7 +310,6 @@ class VLFParser
              * 
              *   pre (123);
              */
-
             elseif ($words[0][0] == '%')
             {
                 $code = substr ($line, strlen ($words[0]));
@@ -350,9 +348,7 @@ class VLFParser
              * 
              * Form MyForm
              *     Button MyButton
-             * 
              */
-
             elseif (is_int ($current_object) && isset ($tree[$current_object]['hard']))
             {
                 if ($height <= $tree[$current_object]['hard'] && isset ($parent_objects[$current_object]))
@@ -379,7 +375,6 @@ class VLFParser
                 /**
                  * property_name: property_value
                  */
-
                 $postChar = substr ($words[0], strlen ($words[0]) - 1);
 
                 if ($postChar == ':' || $postChar == '^')
@@ -395,7 +390,6 @@ class VLFParser
                      * property_name:^ property_value_1
                      *                 property_value_2
                      */
-
                     if ($postChar == '^')
                     {
                         $parsed = $this->parseSubText ($untouched_lines, $id, $height);
@@ -430,7 +424,6 @@ class VLFParser
                 /**
                  * ->method_name ([method_arguments])
                  */
-
                 elseif (substr ($words[0], 0, 2) == '->')
                 {
                     $arguments = [];
@@ -468,7 +461,6 @@ class VLFParser
                     /**
                      * ->show
                      */
-
                     elseif (!$this->ignore_unexpected_method_args)
                         throw new \Exception ('Unexpected method arguments list at line "'. $line .'"');
 
@@ -499,9 +491,7 @@ class VLFParser
                  * Не вините меня ;D
                  * 
                  * ? UPD: я чекнул АСД главной формы VoidStudio и заметил, что там всё-же где-то да есть эта штука, так что лучше её не трогать и всё оставить как есть ;D
-                 * 
                  */
-
                 else
                 {
                     $parsed  = $this->parseSubText ($untouched_lines, $id, $height);
@@ -525,7 +515,6 @@ class VLFParser
             /**
              * Что-то загадочное, таинственное, неизвестное человечеству
              */
-
             else throw new \Exception ('Unknown structures founded at line "'. $line .'"');
         }
 
@@ -541,9 +530,7 @@ class VLFParser
      * @param int $down_height - нижняя высота, после которой текст парситься не будет
      * 
      * @return array - возвращает спарсенные подстроки
-     * 
      */
-
     protected function parseSubText (array $lines, $begin_id, int $down_height): array
     {
         $parsed = "\n";
@@ -587,12 +574,15 @@ class VLFParser
      * @param string &$line - строка для подсчёта высоты
      * 
      * @return int - высота строки
-     * 
      */
-
     protected function getLineHeight (string &$line): int
     {
-        return strlen ($line) - strlen ($line = trim ($line));
+        $i = 0;
+
+        while (isset ($line[$i]) && $line[$i] == "\t")
+            ++$i;
+        
+        return strlen ($line = str_repeat ('    ', $i) . substr ($line, $i)) - strlen ($line = trim ($line));
     }
 
     /**
@@ -602,9 +592,7 @@ class VLFParser
      * @param array $segments - массив строк
      * 
      * @return array - возвращает очищенный массив
-     * 
      */
-
     protected function linesFilter (array $segments): array
     {
         return array_filter ($segments, function ($text)

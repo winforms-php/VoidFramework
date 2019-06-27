@@ -6,8 +6,6 @@ namespace VoidEngine;
 const CORE_DIR = __DIR__ .'/../%FRAMEWORK_PATH%/core';
 const APP_DIR  = __DIR__;
 
-chdir (APP_DIR); // Меняем стандартную директорию на директорию приложения
-
 # Подгружаем PHP расширения
 foreach (glob (CORE_DIR .'/ext/php_*.dll') as $ext)
 	if (!extension_loaded ($ext = substr (basename ($ext), 4, -4)))
@@ -15,6 +13,8 @@ foreach (glob (CORE_DIR .'/ext/php_*.dll') as $ext)
 
 # Подгружаем Qero-пакеты
 require __DIR__ .'/../qero-packages/autoload.php';
+
+chdir (APP_DIR); // Меняем стандартную директорию на директорию приложения
 
 # Парсим app.vlf
 $parser = new VLFParser (__DIR__. '/app.vlf', [
