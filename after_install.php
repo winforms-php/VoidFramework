@@ -33,6 +33,13 @@ if (!is_dir (QERO_DIR .'/app'))
     mkdir (QERO_DIR .'/app');
     
     dir_copy (__DIR__ .'/app_bundle', QERO_DIR .'/app');
+
+    // Обновление переменных
+    file_put_contents (QERO_DIR .'/app/start.php', str_replace ([
+        '%FRAMEWORK_PATH%'
+    ], [
+        'qero-packages'. str_replace (dirname (__DIR__, 3), '', __DIR__)
+    ], file_get_contents (QERO_DIR .'/app/start.php')));
 }
 
 Qero\dir_delete (__DIR__ .'/app_bundle');

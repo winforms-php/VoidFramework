@@ -3,7 +3,7 @@
 namespace VoidEngine;
 
 # Объявление констант
-const CORE_DIR = __DIR__ .'/../qero-packages/KRypt0nn/VoidFramework/KRypt0nn-VoidFramework-e1e6af0/core';
+const CORE_DIR = __DIR__ .'/../%FRAMEWORK_PATH%/core';
 const APP_DIR  = __DIR__;
 
 chdir (APP_DIR); // Меняем стандартную директорию на директорию приложения
