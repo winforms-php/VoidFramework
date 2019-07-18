@@ -18,7 +18,7 @@ class Form extends Control
 		$w = VoidEngine::getProperty ($obj, 'Width');
 		$h = VoidEngine::getProperty ($obj, 'Height');
 		
-		VoidEngine::removeObject ($obj);
+		VoidEngine::removeObjects ($obj);
 		
 		return [$w, $h];
 	}
@@ -32,7 +32,7 @@ class Form extends Control
 
 		$this->setProperty ('ClientSize', $obj);
 
-		VoidEngine::removeObject ($obj);
+		VoidEngine::removeObjects ($obj);
 	}
 }
 

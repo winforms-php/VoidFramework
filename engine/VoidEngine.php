@@ -13,7 +13,7 @@
  * @see         license.txt for details
  * @author      Podvirnyy Nikita (KRypt0n_) & Andrey Kusov
  * 
- * @version     3.1.2 build-2019/06/27 (major.minor.patch state-y/m/d)
+ * @version     3.2.0 build-2019/07/18 (major.minor.patch state-y/m/d)
  * 
  * Contacts:
  *
@@ -29,10 +29,12 @@
 
 namespace VoidEngine;
 
-const ENGINE_VERSION = '3.1.0 build-2019/06/16';
+const ENGINE_VERSION = '3.2.0 build-2019/07/18';
 const ENGINE_DIR = __DIR__;
 
 chdir (ENGINE_DIR);
+
+$GLOBALS['error_status'] = true;
 
 $GLOBALS['__debug'] = [
     'start_time' => microtime (true)

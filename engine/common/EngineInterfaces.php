@@ -333,7 +333,7 @@ class VoidEngine
             $dictionary = new WFObject ('System.Collections.Generic.Dictionary`2[System.String,System.String]', null);
 
         if ($assemblies === null)
-            $assemblies = getNetArray ('System.String', array_map ('VoidEngine\text', [
+            $assemblies = getNetArray ('System.String', array_map ('\VoidEngine\text', [
                 // CORE_DIR .'/CefSharp.dll',
                 CORE_DIR .'/FastColoredTextBox.dll',
                 CORE_DIR .'/ScintillaNET.dll'

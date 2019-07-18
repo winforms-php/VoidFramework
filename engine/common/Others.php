@@ -2,6 +2,26 @@
 
 namespace VoidEngine;
 
+function err_status (bool $status = null): bool
+{
+    $oldStatus = $GLOBALS['error_status'];
+
+    if ($status !== null)
+        $GLOBALS['error_status'] = $status;
+    
+    return $oldStatus;
+}
+
+function err_no (): bool
+{
+    return err_status (false);
+}
+
+function err_yes (): bool
+{
+    return err_status (true);
+}
+
 function run (string $path, ...$args)
 {
     return (new Process)->start ($path, ...$args);
@@ -441,10 +461,12 @@ function get_cursor_pos (int $handle = null): array
 
 set_error_handler (function (...$args)
 {
-    pre ($args);
+    if ($GLOBALS['error_status'])
+        pre ($args);
 });
 
 set_exception_handler (function (...$args)
 {
-    pre ($args);
+    if ($GLOBALS['error_status'])
+        pre ($args);
 });

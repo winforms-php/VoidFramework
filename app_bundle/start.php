@@ -1,10 +1,14 @@
 <?php
-    
+
 namespace VoidEngine;
 
+# Поиск basefolder VoidFramework'а
+// Да, это выглядит плохо. Вероятно в будущем я сделаю нормальную систему в Qero, без basefolder'ов
+$package = json_decode (file_get_contents (dirname (__DIR__) .'/qero-packages/packages.json'), true)['github:KRypt0nn/VoidFramework']['basefolder'];
+
 # Объявление констант
-const CORE_DIR = __DIR__ .'/../%FRAMEWORK_PATH%/core';
 const APP_DIR  = __DIR__;
+define ('VoidEngine\CORE_DIR', dirname (__DIR__) .'/qero-packages/KRypt0nn/VoidFramework/'. $package .'/core');
 
 # Подгружаем PHP расширения
 foreach (glob (CORE_DIR .'/ext/php_*.dll') as $ext)

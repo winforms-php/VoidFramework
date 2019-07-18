@@ -8,6 +8,7 @@ class Events
 
     static function setObjectEvent (int $object, string $eventName, $function)
     {
+        $eventName = strtolower ($eventName);
         self::$events[$object][$eventName] = $function;
 
         VoidEngine::setObjectEvent ($object, $eventName, "if (VoidEngine\Events::getObjectEvent ('$object', '$eventName') !== false) VoidEngine\Events::getObjectEvent ('$object', '$eventName') (VoidEngine\_c('$object'), isset (\$args) ? (is_int (\$args) && VoidEngine\VoidEngine::objectExists (\$args) ? new VoidEngine\EventArgs (\$args) : \$args) : false);");
@@ -15,6 +16,7 @@ class Events
 
     static function reserveObjectEvent (int $object, string $eventName)
     {
+        $eventName = strtolower ($eventName);
         self::$events[$object][$eventName] = function ($self) {};
 
         VoidEngine::setObjectEvent ($object, $eventName, '');
@@ -22,6 +24,7 @@ class Events
 
     static function removeObjectEvent (int $object, string $eventName)
     {
+        $eventName = strtolower ($eventName);
         VoidEngine::removeObjectEvent ($object, $eventName);
 
         unset (self::$events[$object][$eventName]);
@@ -29,6 +32,8 @@ class Events
 
     static function getObjectEvent (int $object, string $eventName)
     {
+        $eventName = strtolower ($eventName);
+        
         return self::$events[$object][$eventName] ?: false;
     }
 
