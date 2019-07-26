@@ -2,8 +2,6 @@
 
 namespace VoidEngine;
 
-use VoidCore;
-
 class VoidEngine
 {
     /**
@@ -21,7 +19,7 @@ class VoidEngine
 
     public static function createObject ($objectName, $objectGroup = null, ...$args): int
     {
-        return VoidCore::createObject ($objectName, $objectGroup, ...$args);
+        return \VoidCore::createObject ($objectName, $objectGroup, ...$args);
     }
 
     /**
@@ -38,7 +36,7 @@ class VoidEngine
 
     public static function removeObjects (int ...$selectors): void
     {
-        VoidCore::removeObjects (...$selectors);
+        \VoidCore::removeObjects (...$selectors);
     }
 
     /**
@@ -55,7 +53,7 @@ class VoidEngine
 
     public static function destructObject (int $selector): bool
     {
-        return VoidCore::destructObject ($selector);
+        return \VoidCore::destructObject ($selector);
     }
 
     /**
@@ -72,7 +70,7 @@ class VoidEngine
 
     public static function createClass ($className, $classGroup = null): int
     {
-        return VoidCore::getClass ($className, $classGroup);
+        return \VoidCore::getClass ($className, $classGroup);
     }
 
     /**
@@ -91,7 +89,7 @@ class VoidEngine
 
     public static function objectExists (int $selector): bool
     {
-        return VoidCore::objectExists ($selector);
+        return \VoidCore::objectExists ($selector);
     }
 
     /**
@@ -106,7 +104,7 @@ class VoidEngine
 
     public static function objectType ($objectName, $objectGroup = null)
     {
-        return VoidCore::typeof ($objectName, $objectGroup);
+        return \VoidCore::typeof ($objectName, $objectGroup);
     }
 
     /**
@@ -129,7 +127,7 @@ class VoidEngine
 
     public static function getProperty (int $selector, $propertyName)
     {
-        return VoidCore::getProp ($selector, $propertyName);
+        return \VoidCore::getProp ($selector, $propertyName);
     }
 
     /**
@@ -151,7 +149,7 @@ class VoidEngine
 
     public static function setProperty (int $selector, string $propertyName, $value): void
     {
-        VoidCore::setProp ($selector, $propertyName, $value);
+        \VoidCore::setProp ($selector, $propertyName, $value);
     }
 
     /**
@@ -173,7 +171,7 @@ class VoidEngine
 
     public static function getField (int $selector, $fieldName)
     {
-        return VoidCore::getField ($selector, $fieldName);
+        return \VoidCore::getField ($selector, $fieldName);
     }
 
     /**
@@ -190,7 +188,7 @@ class VoidEngine
 
     public static function setField (int $selector, string $fieldName, $value): void
     {
-        VoidCore::setField ($selector, $fieldName, $value);
+        \VoidCore::setField ($selector, $fieldName, $value);
     }
 
     /**
@@ -216,7 +214,7 @@ class VoidEngine
 
     public static function callMethod (int $selector, $methodName, ...$args)
     {
-        return VoidCore::callMethod ($selector, $methodName, ...$args);
+        return \VoidCore::callMethod ($selector, $methodName, ...$args);
     }
 
     /**
@@ -234,7 +232,7 @@ class VoidEngine
 
     public static function getArrayValue (int $selector, $index)
     {
-        return VoidCore::getArrayValue ($selector, $index);
+        return \VoidCore::getArrayValue ($selector, $index);
     }
 
     /**
@@ -254,7 +252,7 @@ class VoidEngine
 
     public static function setArrayValue (int $selector, $index, $value): void
     {
-        VoidCore::setArrayValue ($selector, $index, $value);
+        \VoidCore::setArrayValue ($selector, $index, $value);
     }
 
     /**
@@ -274,7 +272,7 @@ class VoidEngine
         if (self::eventExists ($selector, $eventName))
             self::removeObjectEvent ($selector, $eventName);
 
-        VoidCore::setEvent ($selector, $eventName, $code);
+        \VoidCore::setEvent ($selector, $eventName, $code);
         Components::setComponentEvent ($selector, $eventName, $code);
     }
 
@@ -295,7 +293,7 @@ class VoidEngine
 
     public static function eventExists (int $selector, string $eventName): bool
     {
-        return VoidCore::eventExists ($selector, $eventName);
+        return \VoidCore::eventExists ($selector, $eventName);
     }
 
     /**
@@ -314,7 +312,7 @@ class VoidEngine
 
     public static function removeObjectEvent (int $selector, string $eventName): void
     {
-        VoidCore::removeEvent ($selector, $eventName);
+        \VoidCore::removeEvent ($selector, $eventName);
         Components::removeComponentEvent ($selector, $eventName);
     }
 
@@ -329,7 +327,7 @@ class VoidEngine
 
     public static function importObject (string $data): int
     {
-        return VoidCore::importObject ($data);
+        return \VoidCore::importObject ($data);
     }
 
     /**
@@ -343,7 +341,7 @@ class VoidEngine
 
     public static function exportObject (int $selector): string
     {
-        return VoidCore::exportObject ($selector);
+        return \VoidCore::exportObject ($selector);
     }
 
     /**
