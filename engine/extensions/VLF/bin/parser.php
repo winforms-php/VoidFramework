@@ -69,7 +69,12 @@ class VLFParser
         $this->links = $info[1];
 
         if ($this->use_caching)
+        {
+            if (!is_dir (dirname (__DIR__) .'/cache'))
+                mkdir (dirname (__DIR__) .'/cache');
+
             file_put_contents (text (VLF_EXT_DIR .'/cache/'. sha1 ($content) .'.cache'), gzdeflate (serialize ([sha1 (file_get_contents (text (__FILE__))), $info])));
+        }
     }
 
     /**

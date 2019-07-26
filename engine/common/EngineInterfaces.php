@@ -2,6 +2,8 @@
 
 namespace VoidEngine;
 
+use VoidCore;
+
 class VoidEngine
 {
     /**
@@ -19,7 +21,7 @@ class VoidEngine
 
     public static function createObject ($objectName, $objectGroup = null, ...$args): int
     {
-        return winforms_createObject ($objectName, $objectGroup, ...$args);
+        return VoidCore::createObject ($objectName, $objectGroup, ...$args);
     }
 
     /**
@@ -36,7 +38,7 @@ class VoidEngine
 
     public static function removeObjects (int ...$selectors): void
     {
-        winforms_removeObjects (...$selectors);
+        VoidCore::removeObjects (...$selectors);
     }
 
     /**
@@ -53,7 +55,7 @@ class VoidEngine
 
     public static function destructObject (int $selector): bool
     {
-        return winforms_destructObject ($selector);
+        return VoidCore::destructObject ($selector);
     }
 
     /**
@@ -70,7 +72,7 @@ class VoidEngine
 
     public static function createClass ($className, $classGroup = null): int
     {
-        return winforms_getClass ($className, $classGroup);
+        return VoidCore::getClass ($className, $classGroup);
     }
 
     /**
@@ -89,7 +91,7 @@ class VoidEngine
 
     public static function objectExists (int $selector): bool
     {
-        return winforms_objectExists ($selector);
+        return VoidCore::objectExists ($selector);
     }
 
     /**
@@ -104,7 +106,7 @@ class VoidEngine
 
     public static function objectType ($objectName, $objectGroup = null)
     {
-        return winforms_typeof ($objectName, $objectGroup);
+        return VoidCore::typeof ($objectName, $objectGroup);
     }
 
     /**
@@ -127,7 +129,7 @@ class VoidEngine
 
     public static function getProperty (int $selector, $propertyName)
     {
-        return winforms_getProp ($selector, $propertyName);
+        return VoidCore::getProp ($selector, $propertyName);
     }
 
     /**
@@ -149,7 +151,46 @@ class VoidEngine
 
     public static function setProperty (int $selector, string $propertyName, $value): void
     {
-        winforms_setProp ($selector, $propertyName, $value);
+        VoidCore::setProp ($selector, $propertyName, $value);
+    }
+
+    /**
+     * * Получение поля объекта
+     * 
+     * @param int $selector - указатель на объект
+     * @param mixed $fieldName - название поля
+     * 
+     * @param mixed $fieldName может быть передан с указанием на тип возвращаемого значения через структуру вида
+     * [название свойства, возвращаемый им тип]
+     * 
+     * @return mixed - возвращает поле объекта
+     * 
+     * $selector = VoidEngine::createObject ('System.Net.IPAddress', 'System.Net');
+     * 
+     * pre (VoidEngine::getField ($selector, 'Any'));
+     * 
+     */
+
+    public static function getField (int $selector, $fieldName)
+    {
+        return VoidCore::getField ($selector, $fieldName);
+    }
+
+    /**
+     * * Установка поля объекта
+     * 
+     * @param int $selector - указатель на объект
+     * @param string $fieldName - название поля
+     * @param mixed $value - значение поля
+     * 
+     * @param mixed $value может быть передан в качестве определённого типа через структуру вида
+     * [значение, тип]
+     * 
+     */
+
+    public static function setField (int $selector, string $fieldName, $value): void
+    {
+        VoidCore::setField ($selector, $fieldName, $value);
     }
 
     /**
@@ -175,7 +216,7 @@ class VoidEngine
 
     public static function callMethod (int $selector, $methodName, ...$args)
     {
-        return winforms_callMethod ($selector, $methodName, ...$args);
+        return VoidCore::callMethod ($selector, $methodName, ...$args);
     }
 
     /**
@@ -193,7 +234,7 @@ class VoidEngine
 
     public static function getArrayValue (int $selector, $index)
     {
-        return winforms_getArrayValue ($selector, $index);
+        return VoidCore::getArrayValue ($selector, $index);
     }
 
     /**
@@ -213,7 +254,7 @@ class VoidEngine
 
     public static function setArrayValue (int $selector, $index, $value): void
     {
-        winforms_setArrayValue ($selector, $index, $value);
+        VoidCore::setArrayValue ($selector, $index, $value);
     }
 
     /**
@@ -233,7 +274,7 @@ class VoidEngine
         if (self::eventExists ($selector, $eventName))
             self::removeObjectEvent ($selector, $eventName);
 
-        winforms_setEvent ($selector, $eventName, $code);
+        VoidCore::setEvent ($selector, $eventName, $code);
         Components::setComponentEvent ($selector, $eventName, $code);
     }
 
@@ -254,7 +295,7 @@ class VoidEngine
 
     public static function eventExists (int $selector, string $eventName): bool
     {
-        return winforms_eventExists ($selector, $eventName);
+        return VoidCore::eventExists ($selector, $eventName);
     }
 
     /**
@@ -273,8 +314,7 @@ class VoidEngine
 
     public static function removeObjectEvent (int $selector, string $eventName): void
     {
-        winforms_removeEvent ($selector, $eventName);
-
+        VoidCore::removeEvent ($selector, $eventName);
         Components::removeComponentEvent ($selector, $eventName);
     }
 
@@ -289,7 +329,7 @@ class VoidEngine
 
     public static function importObject (string $data): int
     {
-        return winforms_importObject ($data);
+        return VoidCore::importObject ($data);
     }
 
     /**
@@ -303,7 +343,7 @@ class VoidEngine
 
     public static function exportObject (int $selector): string
     {
-        return winforms_exportObject ($selector);
+        return VoidCore::exportObject ($selector);
     }
 
     /**
@@ -425,7 +465,7 @@ class EngineAdditions
                         $property = 'int';
                     }
 
-                    catch (\WinFormsException $e)
+                    catch (\Throwable $e)
                     {
                         return [
                             'type'  => 'vrsf',
@@ -436,7 +476,7 @@ class EngineAdditions
             }
         }
 
-        catch (\WinFormsException $e)
+        catch (\Throwable $e)
         {
             $property = 'object';
         }
@@ -510,7 +550,7 @@ class WFObject implements \ArrayAccess
                     return $this->getProperty ('Count');
                 }
 
-                catch (\WinFormsException $e)
+                catch (\Throwable $e)
                 {
                     return $this->getProperty ('Length');
                 }
@@ -704,7 +744,7 @@ class WFObject implements \ArrayAccess
 			return $this->getProperty ('Name');
         }
         
-		catch (\WinFormsException $e)
+		catch (\Throwable $e)
 		{
 			return $this->name;
 		}
@@ -717,7 +757,7 @@ class WFObject implements \ArrayAccess
 			$this->setProperty ('Name', $name);
         }
         
-		catch (\WinFormsException $e)
+		catch (\Throwable $e)
 		{
 			$this->name = $name;
 		}

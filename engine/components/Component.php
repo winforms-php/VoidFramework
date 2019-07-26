@@ -50,7 +50,7 @@ class Component extends WFObject
 
     public function dispose (): void
 	{
-        foreach (array_merge (array_diff (get_object_vars ($this), ['selector']), ['selector']) as $param => $value)
+        foreach (array_diff (get_object_vars ($this), ['selector']) as $param => $value)
         {
             if (is_int ($value))
             {
@@ -64,6 +64,14 @@ class Component extends WFObject
                 $value->dispose ();
 
             unset ($this->$param);
+        }
+
+        if (isset ($this->selector))
+        {
+            if (VoidEngine::objectExists ($this->selector))
+                VoidEngine::removeObjects ($this->selector);
+            
+            Components::removeComponent ($this->selector);
         }
 
         Components::cleanJunk ();

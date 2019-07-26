@@ -2,6 +2,8 @@
 
 namespace VoidEngine;
 
+use VoidCore;
+
 function err_status (bool $status = null): bool
 {
     $oldStatus = $GLOBALS['error_status'];
@@ -56,7 +58,7 @@ function php_errors_check (string $code): ?array
 
 function text (string $text): ?string
 {
-    return winforms_to1251 ($text);
+    return VoidCore::to1251 ($text);
 }
 
 function enum (string $name): array

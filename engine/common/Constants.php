@@ -338,9 +338,11 @@ $constants = [
 	'clLight'  	  => $converter->fromHtml ('#EEEEEE')
 ];
 
-foreach ($constants as $constantName => $constantValue)
-	define ($constantName, $constantValue);
+foreach ($constants as $name => $value)
+	define ($name, $value);
+
+$argv = START_PARAMS;
+$argc = sizeof ($argv);
 
 VoidEngine::removeObjects ($converter->selector);
-
 unset ($constants, $env, $params, $converter);

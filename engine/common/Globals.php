@@ -4,8 +4,8 @@ namespace VoidEngine;
 
 $APPLICATION = new class
 {
-    public $executablePath;
     public $application;
+    public $executablePath;
     
     public function __construct ()
     {
@@ -30,13 +30,22 @@ $APPLICATION = new class
     public function restart (): void
     {
         $this->application->restart ();
-
         $this->close ();
     }
     
     public function close (): void
     {
         $this->application->exit ();
+    }
+
+    public function __call (string $name, array $args)
+    {
+        return $this->application->$name (...$args);
+    }
+
+    public function __get (string $name)
+    {
+        return $this->application->$name;
     }
 };
 

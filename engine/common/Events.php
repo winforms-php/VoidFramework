@@ -11,7 +11,7 @@ class Events
         $eventName = strtolower ($eventName);
         self::$events[$object][$eventName] = $function;
 
-        VoidEngine::setObjectEvent ($object, $eventName, "if (VoidEngine\Events::getObjectEvent ('$object', '$eventName') !== false) VoidEngine\Events::getObjectEvent ('$object', '$eventName') (VoidEngine\_c('$object'), isset (\$args) ? (is_int (\$args) && VoidEngine\VoidEngine::objectExists (\$args) ? new VoidEngine\EventArgs (\$args) : \$args) : false);");
+        VoidEngine::setObjectEvent ($object, $eventName, "if (VoidEngine\Events::getObjectEvent ('$object', '$eventName') !== false) VoidEngine\Events::getObjectEvent ('$object', '$eventName') (VoidEngine\_c('$object'), isset (\$args) ? (is_int (\$args) && VoidEngine\VoidEngine::objectExists (\$args) ? new VoidEngine\WFObject (\$args) : \$args) : false);");
     }
 
     static function reserveObjectEvent (int $object, string $eventName)
@@ -40,13 +40,5 @@ class Events
     static function getObjectEvents (int $object)
     {
         return self::$events[$object] ?: false;
-    }
-}
-
-class EventArgs extends WFObject
-{
-	public function __construct (int $selector)
-    {
-        $this->selector = $selector;
     }
 }
