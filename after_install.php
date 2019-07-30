@@ -1,5 +1,7 @@
 <?php
 
+echo '    Configuring VoidFramework...'. PHP_EOL;
+
 function dir_copy (string $from, string $to): bool
 {
     if (!is_dir ($from))
@@ -28,9 +30,14 @@ file_put_contents (QERO_DIR .'/start.bat', '@echo off
 
 if (!is_dir (QERO_DIR .'/app'))
 {
+    echo '    Configuring application...'. PHP_EOL;
+
     mkdir (QERO_DIR .'/app');
     dir_copy (__DIR__ .'/app_bundle', QERO_DIR .'/app');
 }
 
 Qero\dir_delete (__DIR__ .'/app_bundle');
 unlink (__FILE__);
+
+echo '    Configuration completed'. PHP_EOL .
+     '    Thank for installing KRypt0nn/VoidFramework!'. PHP_EOL . PHP_EOL;

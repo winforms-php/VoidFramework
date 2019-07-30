@@ -62,7 +62,7 @@ class VoidEngine
      * @param mixed $className - полное название класса
      * [@param mixed $classGroup = null] - полное пространство имён класса
      * 
-     * @return int - возвращает указатель на созданный объект
+     * @return int - возвращает указатель на созданный класс
      * 
      * VoidEngine::createClass ('System.Windows.Forms.MessageBox');
      * 
@@ -71,6 +71,21 @@ class VoidEngine
     public static function createClass ($className, $classGroup = null): int
     {
         return \VoidCore::getClass ($className, $classGroup);
+    }
+
+    /**
+     * * Создание делегата
+     * 
+     * @param string $type - полный тип делегата
+     * @param string $code - исполняемый PHP код
+     * 
+     * @return int - возвращает указатель на созданный делегат
+     * 
+     */
+
+    public static function createDelegate (string $type, string $code): int
+    {
+        return \VoidCore::createDelegate ($type, $code);
     }
 
     /**
@@ -518,6 +533,9 @@ class WFObject implements \ArrayAccess
 
     public function __construct ($object, ?string $classGroup = 'auto', ...$args)
     {
+        foreach ($args as $id => $arg)
+            $args[$id] = ngineAdditions::uncoupleSelector ($arg);
+
         if (is_string ($object))
             $this->selector = VoidEngine::createObject ($object, $classGroup == 'auto' ?
                 substr ($object, 0, strrpos ($object, '.')) : $classGroup, ...$args);
@@ -708,12 +726,28 @@ class WFObject implements \ArrayAccess
 	
     protected function getProperty ($name)
     {
-        return VoidEngine::getProperty ($this->selector, $name);
+        try
+        {
+            return VoidEngine::getProperty ($this->selector, $name);
+        }
+
+        catch (\Throwable $e)
+        {
+            return VoidEngine::getField ($this->selector, $name);
+        }
     }
 
     protected function setProperty ($name, $value)
     {
-        VoidEngine::setProperty ($this->selector, $name, $value);
+        try
+        {
+            VoidEngine::setProperty ($this->selector, $name, $value);
+        }
+
+        catch (\Throwable $e)
+        {
+            VoidEngine::setField ($this->selector, $name, $value);
+        }
     }
 	
     protected function callMethod ($method, ...$args)

@@ -11,7 +11,11 @@ class Events
         $eventName = strtolower ($eventName);
         self::$events[$object][$eventName] = $function;
 
-        VoidEngine::setObjectEvent ($object, $eventName, "if (VoidEngine\Events::getObjectEvent ('$object', '$eventName') !== false) VoidEngine\Events::getObjectEvent ('$object', '$eventName') (VoidEngine\_c('$object'), isset (\$args) ? (is_int (\$args) && VoidEngine\VoidEngine::objectExists (\$args) ? new VoidEngine\WFObject (\$args) : \$args) : false);");
+        VoidEngine::setObjectEvent ($object, $eventName, "
+            if (VoidEngine\Events::getObjectEvent ('$object', '$eventName') !== false)
+                VoidEngine\Events::getObjectEvent ('$object', '$eventName') (VoidEngine\_c('$object'),
+                    isset (\$args) ? (is_int (\$args) && VoidEngine\VoidEngine::objectExists (\$args) && VoidEngine\VoidEngine::objectExists (\$argsSelector = VoidCore::getArrayValue (\$args, 1)) ?
+                        new VoidEngine\WFObject (\$argsSelector) : \$args) : null);");
     }
 
     static function reserveObjectEvent (int $object, string $eventName)
