@@ -215,18 +215,20 @@ class Components
 
     public static function setComponentEvent (int $selector, string $eventName, string $code): void
     {
-        self::$events[$selector][$eventName] = $code;
+        self::$events[$selector][strtolower ($eventName)] = $code;
     }
 
     public static function getComponentEvent (int $selector, string $eventName)
     {
+        $eventName = strtolower ($eventName);
+
         return isset (self::$events[$selector][$eventName]) ?
             self::$events[$selector][$eventName] : false;
     }
 
     public static function removeComponentEvent (int $selector, string $eventName): void
     {
-        unset (self::$events[$selector][$eventName]);
+        unset (self::$events[$selector][strtolower ($eventName)]);
     }
 
     public static function removeComponent (int $selector): void

@@ -52,9 +52,7 @@ class VoidDesigner extends Component
         VoidEngine::setObjectEvent ($this->control, 'KeyDown', '
             namespace VoidEngine;
 
-            $args = new EventArgs ($args);
-
-            if ($args->keycode == 46)
+            if ((new WFObject ($args))->keycode == 46)
                 _c('. $this->selector .')->removeSelected ();
         ');
 
@@ -127,6 +125,7 @@ class VoidDesigner extends Component
                     pre ($value instanceof Component ? $value : $value->toString () ."\nSelector: ". $value->selector);
 
                     // if ($value->getType ()->toString () == 'System.Windows.Forms.Form')
+                    // if ($value->getType ()->isSubclassOf (VoidEngine::objectType ('System.Windows.Forms.Form', 'System.Windows.Forms')))
                         pre ($self->getSharpCode ($self->form->name));
                 });
             };
