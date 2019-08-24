@@ -47,7 +47,7 @@ class FormIcon extends Icon
 
     public function loadFromFile (string $file)
 	{
-        $icon = VoidEngine::createObject ('System.Drawing.Icon', 'System.Drawing', text ($file));
+        $icon = VoidEngine::createObject ('System.Drawing.Icon', 'System.Drawing', $file);
         
         VoidEngine::setProperty ($this->formSelector, 'Icon', $icon);
 

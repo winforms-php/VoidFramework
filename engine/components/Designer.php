@@ -68,7 +68,7 @@ class VoidDesigner extends Component
 
             if (isset (Components::$events[$firstObject]) && sizeof (Components::$events[$firstObject]) > 0)
                 foreach (Components::$events[$firstObject] as $eventName => $event)
-                    _c('. $eventsList->selector .')->getEventByName ($eventName)->value = text ("(добавлено)");
+                    _c('. $eventsList->selector .')->getEventByName ($eventName)->value = "(добавлено)";
 
             _c('. $eventsList->selector .')->refresh ();
         ');
@@ -95,29 +95,29 @@ class VoidDesigner extends Component
 
         $this->rightClickEvent = function ($self, $args)
         {
-            $delItem = new ToolStripMenuItem (text ('Удалить'));
-            $delItem->image = (new Image)->loadFromFile (text (APP_DIR .'/system/icons/Delete_16x.png'));
+            $delItem = new ToolStripMenuItem ('Удалить');
+            $delItem->image = (new Image)->loadFromFile (APP_DIR .'/system/icons/Delete_16x.png');
             $delItem->clickEvent = function () use ($self)
             {
                 $self->removeSelected ();
             };
 
-            $toFrontItem = new ToolStripMenuItem (text ('На передний план'));
-            $toFrontItem->image = (new Image)->loadFromFile (text (APP_DIR .'/system/icons/Front_16x.png'));
+            $toFrontItem = new ToolStripMenuItem ('На передний план');
+            $toFrontItem->image = (new Image)->loadFromFile (APP_DIR .'/system/icons/Front_16x.png');
             $toFrontItem->clickEvent = function () use ($self)
             {
                 $self->bringToFrontSelected ();
             };
 
-            $toBackItem = new ToolStripMenuItem (text ('На задний план'));
-            $toBackItem->image = (new Image)->loadFromFile (text (APP_DIR .'/system/icons/Back_16x.png'));
+            $toBackItem = new ToolStripMenuItem ('На задний план');
+            $toBackItem->image = (new Image)->loadFromFile (APP_DIR .'/system/icons/Back_16x.png');
             $toBackItem->clickEvent = function () use ($self)
             {
                 $self->sendToBackSelected ();
             };
 
-            $infoItem = new ToolStripMenuItem (text ('Отладочная информация'));
-            $infoItem->image = (new Image)->loadFromFile (text (APP_DIR .'/system/icons/Debug_16x.png'));
+            $infoItem = new ToolStripMenuItem ('Отладочная информация');
+            $infoItem->image = (new Image)->loadFromFile (APP_DIR .'/system/icons/Debug_16x.png');
             $infoItem->clickEvent = function () use ($self)
             {
                 $self->getSelectedComponents ()->foreach (function ($value) use ($self)
@@ -206,7 +206,7 @@ class VoidDesigner extends Component
             {
                 if ($this->formsList->items->count > 1)
                 {
-                    if (messageBox (text ('Вы действительно хотите удалить форму "'. $this->form->name .'"?'), text ('Подтвердите действие'), enum ('System.Windows.Forms.MessageBoxButtons.YesNo'), enum ('System.Windows.Forms.MessageBoxIcon.Question')) == 6)
+                    if (messageBox ('Вы действительно хотите удалить форму "'. $this->form->name .'"?', 'Подтвердите действие', enum ('System.Windows.Forms.MessageBoxButtons.YesNo'), enum ('System.Windows.Forms.MessageBoxIcon.Question')) == 6)
                     {
                         foreach ($this->objects as $name => $obj)
                             unset ($this->objects[$name]);
@@ -230,7 +230,7 @@ class VoidDesigner extends Component
 
                 else
                 {
-                    messageBox (text ('Нельзя удалить единственную форму проекта'), text ('Ошибка удаления'), enum ('System.Windows.Forms.MessageBoxButtons.OK'), enum ('System.Windows.Forms.MessageBoxIcon.Error'));
+                    messageBox ('Нельзя удалить единственную форму проекта', 'Ошибка удаления', enum ('System.Windows.Forms.MessageBoxButtons.OK'), enum ('System.Windows.Forms.MessageBoxIcon.Error'));
 
                     return;
                 }

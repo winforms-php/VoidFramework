@@ -31,12 +31,12 @@ class PictureBoxImage
 	
 	public function loadFromFile (string $file)
 	{
-        VoidEngine::setProperty ($this->pictureBoxSelector, 'Image', (new Image ())->loadFromFile (text ($file))->selector);
+        VoidEngine::setProperty ($this->pictureBoxSelector, 'Image', (new Image ())->loadFromFile ($file)->selector);
 	}
 	
 	public function saveToFile (string $file)
 	{
-		VoidEngine::callMethod ($this->selector, 'Save', text ($file));
+		VoidEngine::callMethod ($this->selector, 'Save', $file);
 	}
 	
 	public function loadFromClipboard ()

@@ -75,6 +75,7 @@ class Component extends WFObject
         }
 
         Components::cleanJunk ();
+        gc_collect_cycles ();
     }
 
     public function __destruct ()
@@ -83,6 +84,8 @@ class Component extends WFObject
         {
             VoidEngine::removeObjects ($this->selector);
             Components::removeComponent ($this->selector);
+
+            gc_collect_cycles ();
         }
     }
 }

@@ -8,7 +8,7 @@ function err_status (bool $status = null): bool
 
     if ($status !== null)
         $GLOBALS['error_status'] = $status;
-    
+
     return $oldStatus;
 }
 
@@ -52,11 +52,6 @@ function php_errors_check (string $code): ?array
     }
 
     return null;
-}
-
-function text (string $text): ?string
-{
-    return \VoidCore::to1251 ($text);
 }
 
 function enum (string $name): array
@@ -180,10 +175,7 @@ function str_replace_assoc (string $subject, array $replacements): string
 
 function pre (...$args): void
 {
-	if (sizeof ($args) < 2)
-		$args = current ($args);
-	
-	message (print_r ($args, true));
+	message (sizeof ($args) < 2 ? current ($args) : $args);
 }
 
 function messageBox (string $message, string $caption = '', ...$args)

@@ -1,8 +1,11 @@
-# VoidFramework
+<p align="center">
+    <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/?branch=master"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/quality-score.png?b=master"></a>
+    <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/build-status/master"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/build.png?b=master"></a>
+    <a href="https://scrutinizer-ci.com/code-intelligence"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/code-intelligence.svg?b=master"></a>
+    <a href="license.txt"><img src="https://badges.frapsoft.com/os/gpl/gpl.png?v=103"></a>
+</p>
 
-**VoidFramework** - инструмент для создания графических приложений для **Windows** на базе **.NET Framework** и **PHP**
-
-Основной проект: [WinForms PHP](https://github.com/KRypt0nn/WinForms-PHP)
+<p align="center"><b>VoidFramework</b> - инструмент для создания графических приложений для <b>Windows</b> на базе <b>.NET Framework</b> и <b>PHP</b></p><br>
 
 ## Установка (Qero)
 
@@ -26,4 +29,4 @@ php Qero.phar start
 
 Подробности функционала **VoidEngine** смотреть в основном проекте *(ссылка выше)*
 
-Автор: [Подвирный Никита](https://vk.com/technomindlp). Специально для [Enfesto Studio Group](https://vk.com/hphp_convertation)
+Авторы: [Подвирный Никита](https://vk.com/technomindlp) и [Андрей Кусов](https://vk.com/postmessagea)

@@ -9,7 +9,7 @@ class Process extends Component
 
 	public function __construct (int $pid = null)
 	{
-        $this->selector = VoidEngine::createClass ($this->class, 'System');
+        $this->selector = VoidEngine::createClass ($this->class, $this->namespace);
 
 		if ($pid !== null)
             $this->selector = $pid == getmypid () ?

@@ -13,7 +13,7 @@
  * @see         license.txt for details
  * @author      Podvirnyy Nikita (KRypt0n_) & Andrey Kusov
  * 
- * @version     3.2.5 build-2019/07/30 (major.minor.patch state-y/m/d)
+ * @version     3.3.0 build-2019/08/24 (major.minor.patch state-y/m/d)
  * 
  * Contacts:
  *
@@ -25,11 +25,15 @@
  * Andrey Kusov:
  * VK: vk.com/postmessagea
  * 
+ * ! Отредачил версию в лицензии?
+ * ! 1. Отредачь константу ENGINE_VERSION
+ * ! 2. Отредачь файл qero-info.json
+ * 
  */
 
 namespace VoidEngine;
 
-const ENGINE_VERSION = '3.2.5 build-2019/07/30';
+const ENGINE_VERSION = '3.3.0 build-2019/08/24';
 const ENGINE_DIR = __DIR__;
 
 chdir (ENGINE_DIR);
@@ -105,3 +109,5 @@ if (is_dir ('extensions'))
     foreach (scandir ('extensions') as $ext)
         if (is_dir ('extensions/'. $ext) && file_exists ($ext = 'extensions/'. $ext .'/main.php'))
             require $ext;
+
+gc_collect_cycles ();

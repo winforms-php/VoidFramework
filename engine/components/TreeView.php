@@ -30,7 +30,7 @@ class TreeNode extends Control
     {
         parent::__construct (null, $this->class);
 
-        $this->text  = $text;
+        $this->text = $text;
     }
 
     public function get_path ()
