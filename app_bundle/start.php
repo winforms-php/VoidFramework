@@ -3,17 +3,17 @@
 namespace VoidEngine;
 
 # Объявление констант
-const APP_DIR  = __DIR__;
+const APP_DIR = __DIR__;
 
 $package = json_decode (@file_get_contents (dirname (__DIR__) .'/qero-packages/packages.json'), true);
 
-define ('VoidEngine\CORE_DIR', isset ($package['github:KRypt0nn/VoidFramework']['basefolder']) ?
-	dirname (__DIR__) .'/qero-packages/KRypt0nn/VoidFramework/'. $package['github:KRypt0nn/VoidFramework']['basefolder'] .'/core' : __DIR__);
+define ('VoidEngine\CORE_DIR', isset ($package['github:winforms-php/VoidFramework']['basefolder']) ?
+	dirname (__DIR__) .'/qero-packages/winforms-php/VoidFramework/'. $package['github:winforms-php/VoidFramework']['basefolder'] .'/core' : __DIR__);
 
 # Подгружаем PHP расширения
 foreach (glob (CORE_DIR .'/ext/php_*.dll') as $ext)
-	if (!extension_loaded ($ext = substr (basename ($ext), 4, -4)))
-		dl ($ext);
+	if (!extension_loaded (substr (basename ($ext), 4, -4)))
+		load_extension ($ext);
 
 # Подгружаем Qero-пакеты
 require __DIR__ .'/../qero-packages/autoload.php';

@@ -75,7 +75,6 @@ class Component extends WFObject
         }
 
         Components::cleanJunk ();
-        gc_collect_cycles ();
     }
 
     public function __destruct ()

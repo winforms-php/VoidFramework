@@ -275,20 +275,19 @@ class VoidEngine
      * 
      * @param int $selector - указатель на объект
      * @param string $eventName - название события
-     * @param string $code - PHP код без тэгов
+     * @param callable $event - PHP коллбэк
      * 
      * $selector = VoidEngine::createObject ('System.Windows.Forms.Button', 'System.Windows.Forms');
-     * VoidEngine::setObjectEvent ($selector, 'Click', 'VoidEngine\pre (123);');
+     * VoidEngine::setObjectEvent ($selector, 'Click', function () { pre (123); });
      * 
      */
 
-    public static function setObjectEvent (int $selector, string $eventName, string $code): void
+    public static function setObjectEvent (int $selector, string $eventName, callable $event): void
     {
-        if (self::eventExists ($selector, $eventName))
-            self::removeObjectEvent ($selector, $eventName);
+        /*if (self::eventExists ($selector, $eventName))
+            self::removeObjectEvent ($selector, $eventName);*/
 
-        \VoidCore::setEvent ($selector, $eventName, $code);
-        Components::setComponentEvent ($selector, $eventName, $code);
+        \VoidCore::setEvent ($selector, $eventName, $event);
     }
 
     /**
@@ -300,9 +299,9 @@ class VoidEngine
      * @return bool - возвращает true в случае существования события
      * 
      * $selector = VoidEngine::createObject ('System.Windows.Forms.Button', 'System.Windows.Forms');
-     * VoidEngine::setObjectEvent ($selector, 'Click', 'VoidEngine\pre (123);');
+     * VoidEngine::setObjectEvent ($selector, 'Click', function () { pre (123); });
      * 
-     * var_dump ($selector, 'Click'); // true
+     * var_dump (VoidEngine::eventExists ($selector, 'Click')); // true
      * 
      */
 
@@ -318,17 +317,16 @@ class VoidEngine
      * @param string $eventName - название события
      * 
      * $selector = VoidEngine::createObject ('System.Windows.Forms.Button', 'System.Windows.Forms');
-     * VoidEngine::setObjectEvent ($selector, 'Click', 'VoidEngine\pre (123);');
+     * VoidEngine::setObjectEvent ($selector, 'Click', function () { pre (123); });
      * VoidEngine::removeObjectEvent ($selector, 'Click');
      * 
-     * var_dump ($selector, 'Click'); // false
+     * var_dump (VoidEngine::eventExists ($selector, 'Click')); // false
      * 
      */
 
     public static function removeObjectEvent (int $selector, string $eventName): void
     {
         \VoidCore::removeEvent ($selector, $eventName);
-        Components::removeComponentEvent ($selector, $eventName);
     }
 
     /**
@@ -513,6 +511,11 @@ class EngineAdditions
         return $events;
     }
 
+    /**
+     * При вызове coupleSelector от object->selector указатель может быть обработан в WFObject
+     * Тогда получается бесконечный цикл вида object->selector->selector->selector->...
+     * Чтобы этого избежать нужно добавить исключение - переменную $selfSelector
+     */
     public static function coupleSelector ($value, int $selfSelector = null)
     {
         return is_int ($value) && VoidEngine::objectExists ($value) && $value != $selfSelector ?
@@ -534,7 +537,7 @@ class WFObject implements \ArrayAccess
     public function __construct ($object, ?string $classGroup = 'auto', ...$args)
     {
         foreach ($args as $id => $arg)
-            $args[$id] = ngineAdditions::uncoupleSelector ($arg);
+            $args[$id] = EngineAdditions::uncoupleSelector ($arg);
 
         if (is_string ($object))
             $this->selector = VoidEngine::createObject ($object, $classGroup == 'auto' ?
@@ -704,7 +707,7 @@ class WFObject implements \ArrayAccess
 		return $this->callMethod ('Contains', EngineAdditions::uncoupleSelector ($value));
     }
 
-    public function foreach (\Closure $callback, string $type = null): void
+    public function foreach (callable $callback, string $type = null): void
     {
         $size = $this->count;
 
@@ -712,7 +715,7 @@ class WFObject implements \ArrayAccess
             $callback (EngineAdditions::coupleSelector (VoidEngine::getArrayValue ($this->selector, $type !== null ? [$i, $type] : $i), $this->selector), $i);
     }
 
-    public function where (\Closure $comparator, string $type = null): array
+    public function where (callable $comparator, string $type = null): array
     {
         $size   = $this->count;
         $return = [];

@@ -4,45 +4,35 @@ namespace VoidEngine;
 
 class Events
 {
-    static $events = [];
-
-    static function setObjectEvent (int $object, string $eventName, $function)
+    public static function setObjectEvent (int $object, string $eventName, callable $function)
     {
-        $eventName = strtolower ($eventName);
-        self::$events[$object][$eventName] = $function;
-
-        VoidEngine::setObjectEvent ($object, $eventName, "
-            if (VoidEngine\Events::getObjectEvent ('$object', '$eventName') !== false)
-                VoidEngine\Events::getObjectEvent ('$object', '$eventName') (VoidEngine\_c('$object'),
-                    isset (\$args) ? (is_int (\$args) && VoidEngine\VoidEngine::objectExists (\$args) && VoidEngine\VoidEngine::objectExists (\$argsSelector = VoidCore::getArrayValue (\$args, 1)) ?
-                        new VoidEngine\WFObject (\$argsSelector) : \$args) : null);");
+        VoidEngine::setObjectEvent ($object, $eventName, function ($sender, ...$args) use ($function)
+		{
+            try
+			{
+                foreach ($args as $id => $arg)
+                    $args[$id] = EngineAdditions::coupleSelector ($arg);
+                
+                return $function (($e = _c($sender)) !== false ?
+                    $e : new WFObject ($sender), ...$args);
+            }
+            
+			catch (\Throwable $e)
+			{
+                message ([
+                    'type'  => get_class ($e),
+                    'text'  => $e->getMessage (),
+                    'file'  => $e->getFile (),
+                    'line'  => $e->getLine (),
+                    'code'  => $e->getCode (),
+                    'trace' => $e->getTraceAsString ()
+                ], 'PHP Critical Error');
+            }
+        });
     }
 
-    static function reserveObjectEvent (int $object, string $eventName)
+    public static function removeObjectEvent (int $object, string $eventName)
     {
-        $eventName = strtolower ($eventName);
-        self::$events[$object][$eventName] = function ($self) {};
-
-        VoidEngine::setObjectEvent ($object, $eventName, '');
-    }
-
-    static function removeObjectEvent (int $object, string $eventName)
-    {
-        $eventName = strtolower ($eventName);
         VoidEngine::removeObjectEvent ($object, $eventName);
-
-        unset (self::$events[$object][$eventName]);
-    }
-
-    static function getObjectEvent (int $object, string $eventName)
-    {
-        $eventName = strtolower ($eventName);
-        
-        return self::$events[$object][$eventName] ?: false;
-    }
-
-    static function getObjectEvents (int $object)
-    {
-        return self::$events[$object] ?: false;
     }
 }

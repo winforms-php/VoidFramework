@@ -186,12 +186,10 @@ function messageBox (string $message, string $caption = '', ...$args)
 class Components
 {
     static $components = [];
-    static $events = [];
 
     public static function addComponent (int $selector, object $object): void
     {
         self::$components[$selector] = $object;
-        self::$events[$selector] = [];
     }
 
     public static function getComponent (int $selector)
@@ -205,27 +203,9 @@ class Components
         return isset (self::$components[$selector]);
     }
 
-    public static function setComponentEvent (int $selector, string $eventName, string $code): void
-    {
-        self::$events[$selector][strtolower ($eventName)] = $code;
-    }
-
-    public static function getComponentEvent (int $selector, string $eventName)
-    {
-        $eventName = strtolower ($eventName);
-
-        return isset (self::$events[$selector][$eventName]) ?
-            self::$events[$selector][$eventName] : false;
-    }
-
-    public static function removeComponentEvent (int $selector, string $eventName): void
-    {
-        unset (self::$events[$selector][strtolower ($eventName)]);
-    }
-
     public static function removeComponent (int $selector): void
     {
-        unset (self::$components[$selector], self::$events[$selector]);
+        unset (self::$components[$selector]);
     }
 
     public static function cleanJunk (): void
@@ -245,12 +225,7 @@ class Components
             VoidEngine::destructObject ($selector);
 
             if (!VoidEngine::objectExists ($selector))
-            {
                 unset (self::$components[$selector]);
-
-                if (isset (self::$events[$selector]))
-                    unset (self::$events[$selector]);
-            }
         }
     }
 }
@@ -434,33 +409,47 @@ class Cursor
 
 function get_cursor_x (int $handle = null): int
 {
-    $cursor = new Cursor ($handle);
-
-    return $cursor->getPosition ()[0];
+    return (new Cursor ($handle))->getPosition ()[0];
 }
 
 function get_cursor_y (int $handle = null): int
 {
-    $cursor = new Cursor ($handle);
-
-    return $cursor->getPosition ()[1];
+    return (new Cursor ($handle))->getPosition ()[1];
 }
 
 function get_cursor_pos (int $handle = null): array
 {
-    $cursor = new Cursor ($handle);
-
-    return $cursor->getPosition ();
+    return (new Cursor ($handle))->getPosition ();
 }
 
-set_error_handler (function (...$args)
+set_error_handler (function ($no, $str, $file, $line)
 {
-    if ($GLOBALS['error_status'])
-        pre ($args);
-});
+    // Мог ли я здесь сделать более адекватный код с использованием pow/sqrt? Да, мог
+    // Почему не сделал? Скорость важнее
+    static $errarr = [
+        1     => 'E_ERROR',
+        2     => 'E_WARNING',
+        4     => 'E_PARSE',
+        8     => 'E_NOTICE',
+        16    => 'E_CORE_ERROR',
+        32    => 'E_CORE_WARNING',
+        64    => 'E_COMPILE_ERROR',
+        128   => 'E_COMPILE_WARNING',
+        256   => 'E_USER_ERROR',
+        512   => 'E_USER_WARNING',
+        1024  => 'E_USER_NOTICE',
+        2048  => 'E_STRICT',
+        4096  => 'E_RECOVERABLE_ERROR',
+        8192  => 'E_DEPRECATED',
+        16384 => 'E_USER_DEPRECATED'
+    ];
 
-set_exception_handler (function (...$args)
-{
     if ($GLOBALS['error_status'])
-        pre ($args);
+        message ([
+            'type'      => $errarr[$no],
+            'text'      => $str,
+            'file'      => $file,
+            'line'      => $line,
+            'backtrace' => debug_backtrace ()
+        ], 'PHP Script Error');
 });

@@ -13,7 +13,7 @@
  * @see         license.txt for details
  * @author      Podvirnyy Nikita (KRypt0n_) & Andrey Kusov
  * 
- * @version     3.3.0 build-2019/08/24 (major.minor.patch state-y/m/d)
+ * @version     3.4.0 build-2019/09/02 (major.minor.patch state-y/m/d)
  * 
  * Contacts:
  *
@@ -26,14 +26,15 @@
  * VK: vk.com/postmessagea
  * 
  * ! Отредачил версию в лицензии?
- * ! 1. Отредачь константу ENGINE_VERSION
- * ! 2. Отредачь файл qero-info.json
+ * ! 1. Отредачь константу CORE_VERSION
+ * ! 2. Отредачь константу ENGINE_VERSION
+ * ! 3. Отредачь файл qero-info.json
  * 
  */
 
 namespace VoidEngine;
 
-const ENGINE_VERSION = '3.3.0 build-2019/08/24';
+const ENGINE_VERSION = '3.4.0 build-2019/09/02';
 const ENGINE_DIR = __DIR__;
 
 chdir (ENGINE_DIR);
@@ -54,6 +55,8 @@ require 'common/Globals.php';
 require 'common/Constants.php';
 require 'common/Others.php';
 require 'common/Events.php';
+
+define ('VoidEngine\CORE_VERSION', $APPLICATION->productVersion);
 
 require 'components/Component.php';
 require 'components/Control.php';
@@ -97,17 +100,12 @@ require 'components/DataGridView.php';
 require 'components/TreeView.php';
 require 'components/TabControl.php';
 require 'components/WebBrowser.php';
-// require 'components/Chromium.php';
 require 'components/SplitContainer.php';
 require 'components/Chart.php';
 require 'components/FastColoredTextBox.php';
 require 'components/Scintilla.php';
-require 'components/Designer.php';
-require 'components/EventGrid.php';
 
 if (is_dir ('extensions'))
     foreach (scandir ('extensions') as $ext)
         if (is_dir ('extensions/'. $ext) && file_exists ($ext = 'extensions/'. $ext .'/main.php'))
             require $ext;
-
-gc_collect_cycles ();
