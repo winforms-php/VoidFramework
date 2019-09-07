@@ -42,4 +42,4 @@ unlink ('.gitignore');
 unlink ('README.md');
 
 echo '    Configuration completed'. PHP_EOL .
-     '    Thank for installing KRypt0nn/VoidFramework!'. PHP_EOL . PHP_EOL;
+     '    Thank for installing winforms-php/VoidFramework!'. PHP_EOL . PHP_EOL;
