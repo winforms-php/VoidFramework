@@ -13,7 +13,7 @@
  * @see         license.txt for details
  * @author      Podvirnyy Nikita (KRypt0n_) & Andrey Kusov
  * 
- * @version     3.4.0 build-2019/09/02 (major.minor.patch state-y/m/d)
+ * @version     3.4.1 build-2019/09/07 (major.minor.patch state-y/m/d)
  * 
  * Contacts:
  *
@@ -26,15 +26,14 @@
  * VK: vk.com/postmessagea
  * 
  * ! Отредачил версию в лицензии?
- * ! 1. Отредачь константу CORE_VERSION
- * ! 2. Отредачь константу ENGINE_VERSION
- * ! 3. Отредачь файл qero-info.json
+ * ! 1. Отредачь константу ENGINE_VERSION
+ * ! 2. Отредачь файл qero-info.json
  * 
  */
 
 namespace VoidEngine;
 
-const ENGINE_VERSION = '3.4.0 build-2019/09/02';
+const ENGINE_VERSION = '3.4.1 build-2019/09/07';
 const ENGINE_DIR = __DIR__;
 
 chdir (ENGINE_DIR);
