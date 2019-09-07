@@ -1,14 +1,9 @@
 language: php
 
 php:
-  - 7.4
   - 7.3
 
 matrix:
   fast_finish: true
-
-sudo: false
-
-install: travis_retry composer install --no-interaction --prefer-source
 
 script: phpunit --coverage-text
