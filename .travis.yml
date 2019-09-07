@@ -1,9 +1,0 @@
-language: php
-
-php:
-  - 7.3
-
-matrix:
-  fast_finish: true
-
-script: phpunit --coverage-text

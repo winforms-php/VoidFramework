@@ -1,10 +1,9 @@
 <h1 align="center">VoidFramework</h1>
 
 <p align="center">
-    <!-- <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/?branch=master"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/quality-score.png?b=master"></a>
+    <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/?branch=master"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/quality-score.png?b=master"></a>
     <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/build-status/master"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/build.png?b=master"></a>
-    <a href="https://scrutinizer-ci.com/code-intelligence"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/code-intelligence.svg?b=master"></a> -->
-    <a href="https://travis-ci.com/winforms-php/VoidFramework"><img src="https://travis-ci.com/winforms-php/VoidFramework.svg?branch=master"></a>
+    <a href="https://scrutinizer-ci.com/code-intelligence"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/code-intelligence.svg?b=master"></a>
     <a href="license.txt"><img src="https://badges.frapsoft.com/os/gpl/gpl.png?v=103"></a>
 </p>
 
