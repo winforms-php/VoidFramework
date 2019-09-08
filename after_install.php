@@ -22,7 +22,7 @@ function dir_copy (string $from, string $to): bool
 $info = file_exists (QERO_DIR .'/qero-info.json') ?
     json_decode (file_get_contents (QERO_DIR .'/qero-info.json'), true) : array ();
 
-$info['scripts']['start'] = '"qero-packages'. str_replace (dirname (__DIR__, 3), '', __DIR__) .'/core/VoidCore.exe" "app/start.php"';
+$info['scripts']['start'] = '"qero-packages/winforms-php/VoidFramework/core/VoidCore.exe" "app/start.php"';
 
 file_put_contents (QERO_DIR .'/qero-info.json', json_encode ($info, defined ('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0));
 file_put_contents (QERO_DIR .'/start.bat', '@echo off
@@ -38,8 +38,6 @@ if (!is_dir (QERO_DIR .'/app'))
 
 Qero\dir_delete (__DIR__ .'/app_bundle');
 unlink (__FILE__);
-unlink ('.gitignore');
-unlink ('README.md');
 
 echo '    Configuration completed'. PHP_EOL .
      '    Thank for installing winforms-php/VoidFramework!'. PHP_EOL . PHP_EOL;
