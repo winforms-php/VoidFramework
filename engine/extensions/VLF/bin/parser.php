@@ -620,7 +620,7 @@ class VLFParser
             if ($arguments[$i] == '\\')
                 $canSplit = $i + 1;
 
-            if ($canSplit < $i)
+            elseif ($canSplit < $i)
             {
                 if ($arguments[$i] == '\'' && !$split2)
                     $split1 = !$split1;
