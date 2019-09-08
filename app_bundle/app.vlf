@@ -3,6 +3,8 @@ Form MainForm
     size: [400, 300]
     startPosition: fspCenterScreen
 
+    ClickEvent: fn ($self) => pre ($self->caption)
+
     Button MainButton
         caption: 'Click Me! 😈'
         bounds: [8, 8, 120, 32]
