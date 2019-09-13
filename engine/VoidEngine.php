@@ -77,7 +77,6 @@ require 'components/RadioButton.php';
 require 'components/NumericUpDown.php';
 require 'components/TextBox.php';
 require 'components/ProgressBar.php';
-require 'components/PropertyGrid.php';
 require 'components/Panel.php';
 require 'components/FlowLayoutPanel.php';
 require 'components/TableLayoutPanel.php';
