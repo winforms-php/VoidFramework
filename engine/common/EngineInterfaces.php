@@ -8,7 +8,7 @@ class VoidEngine
      * * Создание объекта
      * 
      * @param mixed $objectName - полное название объекта
-     * [@param mixed $objectGroup = null] - полное пространство имён объекта
+     * [@param mixed $objectGroup = false] - полное пространство имён объекта
      * [@param mixed ...$args = []] - список аргументов создания
      * 
      * @return int - возвращает указатель на созданный объект
@@ -16,8 +16,7 @@ class VoidEngine
      * VoidEngine::createObject ('System.Windows.Forms.Button', 'System.Windows.Forms');
      * 
      */
-
-    public static function createObject ($objectName, $objectGroup = null, ...$args): int
+    public static function createObject ($objectName, $objectGroup = false, ...$args): int
     {
         return \VoidCore::createObject ($objectName, $objectGroup, ...$args);
     }
@@ -33,7 +32,6 @@ class VoidEngine
      * VoidEngine::removeObjects ($button_1, $button_2);
      * 
      */
-
     public static function removeObjects (int ...$selectors): void
     {
         \VoidCore::removeObjects (...$selectors);
@@ -50,7 +48,6 @@ class VoidEngine
      * VoidEngine::destructObject ($button);
      * 
      */
-
     public static function destructObject (int $selector): bool
     {
         return \VoidCore::destructObject ($selector);
@@ -60,15 +57,14 @@ class VoidEngine
      * * Получение указателя на статичный класс
      * 
      * @param mixed $className - полное название класса
-     * [@param mixed $classGroup = null] - полное пространство имён класса
+     * [@param mixed $classGroup = false] - полное пространство имён класса
      * 
      * @return int - возвращает указатель на созданный класс
      * 
      * VoidEngine::createClass ('System.Windows.Forms.MessageBox');
      * 
      */
-
-    public static function createClass ($className, $classGroup = null): int
+    public static function createClass ($className, $classGroup = false): int
     {
         return \VoidCore::getClass ($className, $classGroup);
     }
@@ -82,10 +78,9 @@ class VoidEngine
      * @return int - возвращает указатель на созданный делегат
      * 
      */
-
-    public static function createDelegate (string $type, string $code): int
+    public static function createDelegate (string $type, callable $function): int
     {
-        return \VoidCore::createDelegate ($type, $code);
+        return \VoidCore::createDelegate ($type, $function);
     }
 
     /**
@@ -101,7 +96,6 @@ class VoidEngine
      * var_dump (VoidEngine::objectExists ($button)); // false
      * 
      */
-
     public static function objectExists (int $selector): bool
     {
         return \VoidCore::objectExists ($selector);
@@ -116,8 +110,7 @@ class VoidEngine
     * @return mixed - возвращает указатель на объект типа объекта или false в случае ошибки
     * 
     */
-
-    public static function objectType ($objectName, $objectGroup = null)
+    public static function objectType ($objectName, $objectGroup = false)
     {
         return \VoidCore::typeof ($objectName, $objectGroup);
     }
@@ -139,7 +132,6 @@ class VoidEngine
      * pre (VoidEngine::getProperty ($selector, ['Text', 'string']));
      * 
      */
-
     public static function getProperty (int $selector, $propertyName)
     {
         return \VoidCore::getProp ($selector, $propertyName);
@@ -161,7 +153,6 @@ class VoidEngine
      * VoidEngine::setProperty ($selector, 'Text', ['Hello!', 'string']);
      * 
      */
-
     public static function setProperty (int $selector, string $propertyName, $value): void
     {
         \VoidCore::setProp ($selector, $propertyName, $value);
@@ -183,7 +174,6 @@ class VoidEngine
      * pre (VoidEngine::getField ($selector, 'Any'));
      * 
      */
-
     public static function getField (int $selector, $fieldName)
     {
         return \VoidCore::getField ($selector, $fieldName);
@@ -200,7 +190,6 @@ class VoidEngine
      * [значение, тип]
      * 
      */
-
     public static function setField (int $selector, string $fieldName, $value): void
     {
         \VoidCore::setField ($selector, $fieldName, $value);
@@ -226,7 +215,6 @@ class VoidEngine
      * $result = VoidEngine::callMethod ($selector, ['Show', 'int'], ['Hello, World!', 'string'], ['Test Box', 'string']);
      * 
      */
-
     public static function callMethod (int $selector, $methodName, ...$args)
     {
         return \VoidCore::callMethod ($selector, $methodName, ...$args);
@@ -244,7 +232,6 @@ class VoidEngine
      * @return mixed - возвращает значение массива
      * 
      */
-
     public static function getArrayValue (int $selector, $index)
     {
         return \VoidCore::getArrayValue ($selector, $index);
@@ -264,7 +251,6 @@ class VoidEngine
      * [значение, тип]
      * 
      */
-
     public static function setArrayValue (int $selector, $index, $value): void
     {
         \VoidCore::setArrayValue ($selector, $index, $value);
@@ -281,7 +267,6 @@ class VoidEngine
      * VoidEngine::setObjectEvent ($selector, 'Click', function () { pre (123); });
      * 
      */
-
     public static function setObjectEvent (int $selector, string $eventName, callable $event): void
     {
         /*if (self::eventExists ($selector, $eventName))
@@ -304,7 +289,6 @@ class VoidEngine
      * var_dump (VoidEngine::eventExists ($selector, 'Click')); // true
      * 
      */
-
     public static function eventExists (int $selector, string $eventName): bool
     {
         return \VoidCore::eventExists ($selector, $eventName);
@@ -323,7 +307,6 @@ class VoidEngine
      * var_dump (VoidEngine::eventExists ($selector, 'Click')); // false
      * 
      */
-
     public static function removeObjectEvent (int $selector, string $eventName): void
     {
         \VoidCore::removeEvent ($selector, $eventName);
@@ -337,7 +320,6 @@ class VoidEngine
      * @return int - возвращает указатель на импортированный объект
      * 
      */
-
     public static function importObject (string $data): int
     {
         return \VoidCore::importObject ($data);
@@ -351,7 +333,6 @@ class VoidEngine
      * @return string - возвращает сериализованные данные объекта
      * 
      */
-
     public static function exportObject (int $selector): string
     {
         return \VoidCore::exportObject ($selector);
@@ -377,7 +358,6 @@ class VoidEngine
      * @return array - возвращает список ошибок компиляции
      * 
      */
-
     public static function compile (string $savePath, string $iconPath, string $phpCode, string $productDescription = null, string $productName = null, string $productVersion = null, string $companyName = null, string $copyright = null, string $callSharpCode = '', string $declareSharpCode = '', WFObject $dictionary = null, WFObject $assemblies = null): array
     {
         if ($dictionary === null)
@@ -418,7 +398,7 @@ class EngineAdditions
             (new WFClass ('System.Reflection.Assembly', 'mscorlib'))->loadFrom ($path);
         }
 
-        catch (\Throwable $e)
+        catch (\WinFormsException $e)
         {
             return false;
         }
@@ -476,7 +456,7 @@ class EngineAdditions
                         $property = 'int';
                     }
 
-                    catch (\Throwable $e)
+                    catch (\WinFormsException $e)
                     {
                         return [
                             'type'  => 'vrsf',
@@ -534,14 +514,18 @@ class WFObject implements \ArrayAccess
     protected int $selector = 0;
     protected $name;
 
-    public function __construct ($object, ?string $classGroup = 'auto', ...$args)
+    public function __construct ($object, $classGroup = false, ...$args)
     {
         foreach ($args as $id => $arg)
             $args[$id] = EngineAdditions::uncoupleSelector ($arg);
 
         if (is_string ($object))
-            $this->selector = VoidEngine::createObject ($object, $classGroup == 'auto' ?
-                substr ($object, 0, strrpos ($object, '.')) : $classGroup, ...$args);
+        {
+            $this->selector = VoidEngine::createObject ($object, $classGroup, ...$args);
+            
+            /*$this->selector = VoidEngine::createObject ($object, $classGroup == 'auto' ?
+                substr ($object, 0, strrpos ($object, '.')) : $classGroup, ...$args);*/
+        }
 
         elseif (is_int ($object) && VoidEngine::objectExists ($object))
             $this->selector = $object;
@@ -569,7 +553,7 @@ class WFObject implements \ArrayAccess
                     return $this->getProperty ('Count');
                 }
 
-                catch (\Throwable $e)
+                catch (\WinFormsException $e)
                 {
                     return $this->getProperty ('Length');
                 }
@@ -595,7 +579,7 @@ class WFObject implements \ArrayAccess
                         $names[] = VoidEngine::getProperty (VoidEngine::getArrayValue ($this->selector, [$i, 'object']), 'Text');
                     }
 
-                    catch (\Throwable $e)
+                    catch (\WinFormsException $e)
                     {
                         $names[] = VoidEngine::getArrayValue ($this->selector, [$i, 'string']);
                     }
@@ -631,7 +615,13 @@ class WFObject implements \ArrayAccess
         elseif (substr ($name, -5) == 'Event')
             Events::setObjectEvent ($this->selector, substr ($name, 0, -5), $value);
         
-        else $this->setProperty ($name, EngineAdditions::uncoupleSelector ($value));
+        else
+        {
+            if (is_array ($value) && is_string (current ($value)))
+                $value = getNetArray ('System.String', $value);
+
+            $this->setProperty ($name, EngineAdditions::uncoupleSelector ($value));
+        }
     }
 	
 	public function __call ($method, $args)
@@ -644,10 +634,13 @@ class WFObject implements \ArrayAccess
         return EngineAdditions::coupleSelector ($this->callMethod ($method, ...$args), $this->selector);
     }
 
-    public function addRange (array $values, $assoc = false): void
+    public function addRange ($values, $assoc = false): void
     {
-        foreach ($values as $id => $value)
-            $this->offsetSet ($assoc ? $id : null, $value);
+        if (is_array ($values))
+            foreach ($values as $id => $value)
+                $this->offsetSet ($assoc ? $id : null, $value);
+
+        else $this->callMethod ('AddRange', EngineAdditions::uncoupleSelector ($values));
     }
     
     public function offsetSet ($index, $value)
@@ -662,8 +655,8 @@ class WFObject implements \ArrayAccess
         catch (\Throwable $e)
         {
             return $index === null ?
-                VoidEngine::setArrayValue ($this->selector, $this->count, $value) :
-                VoidEngine::setArrayValue ($this->selector, $index, $value);
+                VoidEngine::setArrayValue ($this->selector, $this->count, EngineAdditions::uncoupleSelector ($value)) :
+                VoidEngine::setArrayValue ($this->selector, $index, EngineAdditions::uncoupleSelector ($value));
         }
     }
 	
@@ -734,7 +727,7 @@ class WFObject implements \ArrayAccess
             return VoidEngine::getProperty ($this->selector, $name);
         }
 
-        catch (\Throwable $e)
+        catch (\WinFormsException $e)
         {
             return VoidEngine::getField ($this->selector, $name);
         }
@@ -747,7 +740,7 @@ class WFObject implements \ArrayAccess
             VoidEngine::setProperty ($this->selector, $name, $value);
         }
 
-        catch (\Throwable $e)
+        catch (\WinFormsException $e)
         {
             VoidEngine::setField ($this->selector, $name, $value);
         }
@@ -806,12 +799,10 @@ class WFObject implements \ArrayAccess
 
 class WFClass extends WFObject
 {
-    public function __construct ($class, ?string $classGroup = 'auto')
+    public function __construct ($class, $classGroup = false)
     {
         if (is_string ($class))
-            $this->selector = VoidEngine::createClass ($class, $classGroup == 'auto' ?
-                substr ($class, 0, strrpos ($class, '.')) : $classGroup
-            );
+            $this->selector = VoidEngine::createClass ($class, $classGroup);
 
         elseif (is_int ($class) && VoidEngine::objectExists ($class))
             $this->selector = $class;

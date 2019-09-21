@@ -13,7 +13,8 @@ class Component extends WFObject
     {
         parent::__construct (
             $className === null ? $this->class : $className,
-            $this->namespace, ...$args
+            $this->namespace ?? false,
+            ...$args
         );
         
         Components::addComponent ($this->selector, $this);
@@ -83,8 +84,6 @@ class Component extends WFObject
         {
             VoidEngine::removeObjects ($this->selector);
             Components::removeComponent ($this->selector);
-
-            gc_collect_cycles ();
         }
     }
 }

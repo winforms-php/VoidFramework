@@ -62,6 +62,19 @@ function enum (string $name): array
     ];
 }
 
+function enum_parse (string $baseType, string $value)
+{
+    try
+    {
+        return VoidEngine::callMethod (VoidEngine::createClass ('System.Enum',''), ['parse', 'object'], VoidEngine::objectType ($baseType), $value, true);
+    }
+
+    catch (\WinFormsException $e)
+    {
+        return (new WFClass ($baseType))->$value;
+    }
+}
+
 function getNetArray (string $type, array $items = []): WFObject
 {
     $array = (new WFClass ('System.Array', null))
@@ -392,7 +405,7 @@ class Cursor
     public function __construct (int $handle = null)
     {
         $handle !== null ?
-            $this->cursor = new WFObject ('System.Windows.Forms.Cursor', 'auto', $handle) :
+            $this->cursor = new WFObject ('System.Windows.Forms.Cursor', false, $handle) :
             $this->cursor = new WFClass ('System.Windows.Forms.Cursor');
     }
 
