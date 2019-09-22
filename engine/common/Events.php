@@ -33,6 +33,6 @@ class Events
 
     public static function removeObjectEvent (int $object, string $eventName)
     {
-        \VoidCore::removeObjectEvent ($object, $eventName);
+        \VoidCore::removeEvent ($object, $eventName);
     }
 }
