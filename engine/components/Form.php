@@ -16,8 +16,8 @@ class Form extends Control
 		$size = $this->getProperty ('ClientSize');
 		
 		return [
-			VoidEngine::getProperty ($size, 'Width'),
-			VoidEngine::getProperty ($size, 'Height')
+			\VoidCore::getProperty ($size, 'Width'),
+			\VoidCore::getProperty ($size, 'Height')
 		];
 	}
 	
@@ -27,8 +27,8 @@ class Form extends Control
 		{
 			$clientSize = $this->getProperty ('ClientSize');
 
-			VoidEngine::setProperty ($clientSize, 'Width', array_shift ($size));
-			VoidEngine::setProperty ($clientSize, 'Height', array_shift ($size));
+			\VoidCore::setProperty ($clientSize, 'Width', array_shift ($size));
+			\VoidCore::setProperty ($clientSize, 'Height', array_shift ($size));
 
 			$this->setProperty ('ClientSize', $clientSize);
 		}
@@ -48,9 +48,9 @@ class FormIcon extends Icon
 
     public function loadFromFile (string $file)
 	{
-        $icon = VoidEngine::createObject ('System.Drawing.Icon', 'System.Drawing', $file);
+        $icon = \VoidCore::createObject ('System.Drawing.Icon', 'System.Drawing', $file);
         
-        VoidEngine::setProperty ($this->formSelector, 'Icon', $icon);
+        \VoidCore::setProperty ($this->formSelector, 'Icon', $icon);
 
 		if (!isset ($this->selector))
 		    $this->selector = $icon;

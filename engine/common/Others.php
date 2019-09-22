@@ -66,7 +66,7 @@ function enum_parse (string $baseType, string $value)
 {
     try
     {
-        return VoidEngine::callMethod (VoidEngine::createClass ('System.Enum',''), ['parse', 'object'], VoidEngine::objectType ($baseType), $value, true);
+        return \VoidCore::callMethod (\VoidCore::getClass ('System.Enum',''), ['parse', 'object'], \VoidCore::typeof ($baseType), $value, true);
     }
 
     catch (\WinFormsException $e)
@@ -78,7 +78,7 @@ function enum_parse (string $baseType, string $value)
 function getNetArray (string $type, array $items = []): WFObject
 {
     $array = (new WFClass ('System.Array', null))
-        ->createInstance (VoidEngine::objectType ($type), $size = sizeof ($items));
+        ->createInstance (\VoidCore::typeof ($type), $size = sizeof ($items));
 
     for ($i = 0; $i < $size; ++$i)
         $array[$i] = array_shift ($items);
@@ -229,15 +229,15 @@ class Components
         {
             try
             {
-                if ($object->getType ()->isSubclassOf (VoidEngine::objectType ('System.Windows.Forms.Form', 'System.Windows.Forms')))
+                if ($object->getType ()->isSubclassOf (\VoidCore::typeof ('System.Windows.Forms.Form', 'System.Windows.Forms')))
                     continue;
             }
 
             catch (\Exception $e) {}
             
-            VoidEngine::destructObject ($selector);
+            \VoidCore::destructObject ($selector);
 
-            if (!VoidEngine::objectExists ($selector))
+            if (!\VoidCore::objectExists ($selector))
                 unset (self::$components[$selector]);
         }
     }
@@ -313,7 +313,7 @@ function c ($name, bool $returnAllSimilarObjects = false)
                     {
                         while (is_object ($parent = _c($object->parent->selector)))
                         {
-                            if ($parent->getType ()->isSubclassOf (VoidEngine::objectType ('System.Windows.Forms.Form', 'System.Windows.Forms')) && $parent->name == $path[0])
+                            if ($parent->getType ()->isSubclassOf (\VoidCore::typeof ('System.Windows.Forms.Form', 'System.Windows.Forms')) && $parent->name == $path[0])
                                 return $objects[$id];
 
                             else $object = $parent;
@@ -394,7 +394,7 @@ class Clipboard
             $collection->add ((string) $file);
 
         (new WFClass ('System.Windows.Forms.Clipboard'))->setFileDropList ($collection);
-        VoidEngine::removeObjects ($collection->selector);
+        \VoidCore::removeObjects ($collection->selector);
     }
 }
 

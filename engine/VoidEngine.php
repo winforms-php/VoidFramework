@@ -13,7 +13,7 @@
  * @see         license.txt for details
  * @author      Podvirnyy Nikita (KRypt0n_) & Andrey Kusov
  * 
- * @version     3.5.5 build-2019/09/21 (major.minor.patch state-y/m/d)
+ * @version     3.5.6 build-2019/09/22 (major.minor.patch state-y/m/d)
  * 
  * Contacts:
  *
@@ -33,7 +33,7 @@
 
 namespace VoidEngine;
 
-const ENGINE_VERSION = '3.5.5 build-2019/09/21';
+const ENGINE_VERSION = '3.5.6 build-2019/09/22';
 const ENGINE_DIR = __DIR__;
 
 chdir (ENGINE_DIR);

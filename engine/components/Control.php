@@ -31,8 +31,8 @@ class Control extends Component
             $font = array_values ($font);
 
             $obj = isset ($font[2]) ?
-                VoidEngine::createObject ('System.Drawing.Font', 'System.Drawing', $font[0], $font[1], [$font[2], 'System.Drawing.FontStyle, System.Drawing']) :
-                VoidEngine::createObject ('System.Drawing.Font', 'System.Drawing', $font[0], $font[1]);
+                \VoidCore::createObject ('System.Drawing.Font', 'System.Drawing', $font[0], $font[1], [$font[2], 'System.Drawing.FontStyle, System.Drawing']) :
+                \VoidCore::createObject ('System.Drawing.Font', 'System.Drawing', $font[0], $font[1]);
             
             $this->setProperty ('Font', $obj);
         }
