@@ -1,58 +1,42 @@
----
-description: >-
-  VoidFramework - инструмент для создания графических приложений для Windows на
-  базе .NET Framework и PHP
----
+<h1 align="center">VoidFramework</h1>
 
-# Начало работы
+<p align="center">
+    <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/?branch=master"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/quality-score.png?b=master"></a>
+    <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/build-status/master"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/build.png?b=master"></a>
+    <a href="https://scrutinizer-ci.com/code-intelligence"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/code-intelligence.svg?b=master"></a>
+    <a href="license.txt"><img src="https://badges.frapsoft.com/os/gpl/gpl.png?v=103"></a>
+</p>
 
- [![](https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/winforms-php/VoidFramework/?branch=master) [![](https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/build.png?b=master)](https://scrutinizer-ci.com/g/winforms-php/VoidFramework/build-status/master) [![](https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+<p align="center"><b>VoidFramework</b> - инструмент для создания графических приложений для <b>Windows</b> на базе <b>.NET Framework</b> и <b>PHP</b></p><br>
 
 ## Системные требования
 
-| Требование | Значение |
-| :--- | :--- |
-| Версия **Windows** | ≥ **7** |
-| Версия **.NET Framework** | ≥ **4.5.2** |
-| Версия **Visual C++ Redistributable** | **2017** |
+Требование | Значение
+------------- | -------------
+Версия **Windows** | ≥ **7**
+Версия **.NET Framework** | ≥ **4.5.2**
+Версия **Visual C++ Redistributable** | **2017**
 
-## Установка
+## Установка (Qero)
 
-{% tabs %}
-{% tab title="Qero" %}
-```text
+```cmd
 php Qero.phar install winforms-php/VoidFramework
 ```
-{% endtab %}
 
-{% tab title="Ручная установка" %}
-Скачайте **GitHub** репозиторий проекта
-
-![](.gitbook/assets/screenshot_1.png)
-
-Распакуйте архив с **VoidFramework** в папку проекта
-
-![](.gitbook/assets/screenshot_1%20%281%29.png)
-
-Переместите папку `app_bundle` на уровень ниже распакованной папки **VoidFramework**'а и переименуйте её в `app`
-
-![](.gitbook/assets/screenshot_1%20%282%29.png)
-{% endtab %}
-{% endtabs %}
-
-{% hint style="info" %}
-Для установки настоятельно рекомендуется использовать [**Qero**](https://github.com/KRypt0nn/Qero). В дальнейшем все действия будут рассматриваться с учётом того, что **VoidFramework** был установлен именно таким образом
-{% endhint %}
+> Qero: [тык](https://github.com/KRypt0nn/Qero)
 
 ## Использование
 
-После установки в проекте появится папка `app`. В ней будет располагаться будущее **VoidFramework**-приложение. В качестве точки входа используется файл `app/start.php`
+После установки создастся папка **app** рядом с папкой **qero-packages**. В ней размещается само приложение **VoidFramework**. В качестве точки входа используется файл **start.php**
 
 Для запуска приложения вы можете прописать команду
 
-```text
+```cmd
 php Qero.phar start
 ```
 
-или запустить файл `start.bat`
+запустить файл **start.bat** или создать какой-нибудь ярлык. Это не суть важно. Запуск приложения происходит через файл **%VoidFramework%/core/VoidCore.exe** с аргументом в виде пути к файлу точки входа *(подробнее в **start.bat**)*
 
+Подробности функционала **VoidEngine** смотреть в основном проекте *(ссылка выше)*
+
+Авторы: [Подвирный Никита](https://vk.com/technomindlp) и [Андрей Кусов](https://vk.com/postmessagea)
