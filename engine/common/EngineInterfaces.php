@@ -106,7 +106,7 @@ class NetObject implements \ArrayAccess
 
     # Управление VoidCore
 
-    protected function getProperty (string $name)
+    protected function getProperty ($name)
     {
         return VoidCore::getProperty ($this->selector, $name);
     }
