@@ -2,6 +2,16 @@
 
 namespace VoidEngine;
 
+use VLF\{
+    Parser as VLFParser,
+    Interpreter as VLFInterpreter
+};
+
+use VLF\VST\{
+    Parser as VSTParser,
+    Interpreter as VSTInterpreter
+};
+
 # Объявление констант
 const APP_DIR = __DIR__;
 
@@ -17,16 +27,10 @@ require __DIR__ .'/../qero-packages/autoload.php';
 
 chdir (APP_DIR); // Меняем стандартную директорию на директорию приложения
 
-# Парсим app.vlf
-$parser = new VLFParser (__DIR__. '/app.vlf', [
-    'strong_line_parser'            => false,
-    'ignore_postobject_info'        => true,
-    'ignore_unexpected_method_args' => true,
+# Парсим стили main.vst
+VSTInterpreter::run (VSTParser::parse ('main.vst'));
 
-    'use_caching' => false,
-    'debug_mode'  => false
-]);
+# Парсим разметку app.vlf и запускаем приложение
+$objects = VLFInterpreter::run (VLFParser::parse ('app.vlf'));
 
-# Запускаем приложение
-$objects = VLFInterpreter::run ($parser);
 $APPLICATION->run ($objects['MainForm']);

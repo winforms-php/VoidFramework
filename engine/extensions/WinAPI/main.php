@@ -19,9 +19,6 @@
  * VK:    vk.com/technomindlp
  *        vk.com/hphp_convertation
  * 
- * ! WIP | Work In Progress
- * TODO
- * 
  */
 
 namespace VoidEngine;
@@ -38,9 +35,7 @@ class WinAPI
          * 
          * @see <https://vk.com/evsoft>
          * @see <https://vk.com/magic.breeze>
-         * 
          */
-
         $this->WinAPI = \FFI::cdef ('
             struct LPCTSTR
             {
@@ -79,33 +74,8 @@ class WinAPI
 
     public function __call ($method, $args)
     {
-        if (method_exists ($this, $method))
-            return $this->$method (...$args);
-        
-        else try
-        {
-            return $this->WinAPI->$method (...$args);
-        }
-
-        catch (\Throwable $e)
-        {
-            throw new \Exception ('Method "'. $method .'" not found or return an exception. Exception info: '. "\n\n". (string) $e);
-        }
+        return method_exists ($this, $method) ?
+            $this->$method (...$args) :
+            $this->WinAPI->$method (...$args);
     }
-
-    public function findWindow (string $caption, string $class = null): ?int
-    {
-        return $this->FindWindowA ($class, $caption);
-    }
-
-    /*public function getWindowCaption (int $handle)
-    {
-        if ($this->IsWindow ($handle)) 
-		{
-			$length = ($this->SendMessageA ($handle, 14, 0, 0) + 1);
-            $caption = str_pad ('', $length);
-            
-			return $this->SendMessageA ($handle, 13, $length, $caption);
-		}
-    }*/
 }

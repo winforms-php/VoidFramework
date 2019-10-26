@@ -1,5 +1,5 @@
 {
-    "version": "3.5.8",
+    "version": "4.0.0dev",
     "entry_point": "engine/VoidEngine.php",
     "after_install": "after_install.php",
     "scripts": {

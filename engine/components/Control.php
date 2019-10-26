@@ -2,24 +2,24 @@
 
 namespace VoidEngine;
 
-class Control extends Component
+use VoidCore;
+
+abstract class Control extends Component
 {
-    public $class = 'System.Windows.Forms.Control';
-
-    public function __construct (Component $parent = null, $className = null, ...$args)
+    public function __construct (NetObject $parent = null, ...$args)
     {
-        parent::__construct ($className, ...$args);
+        parent::__construct (...$args);
 
-        if ($parent)
+        if ($parent !== null)
             $this->parent = $parent;
     }
-	
+
     public function get_caption (): string
     {
         return $this->text;
     }
 	
-    public function set_caption (string $caption)
+    public function set_caption (string $caption): void
     {
         $this->text = $caption;
     }
@@ -31,8 +31,8 @@ class Control extends Component
             $font = array_values ($font);
 
             $obj = isset ($font[2]) ?
-                \VoidCore::createObject ('System.Drawing.Font', 'System.Drawing', $font[0], $font[1], [$font[2], 'System.Drawing.FontStyle, System.Drawing']) :
-                \VoidCore::createObject ('System.Drawing.Font', 'System.Drawing', $font[0], $font[1]);
+                VoidCore::createObject ('System.Drawing.Font', 'System.Drawing', $font[0], $font[1], [$font[2], 'System.Drawing.FontStyle, System.Drawing']) :
+                VoidCore::createObject ('System.Drawing.Font', 'System.Drawing', $font[0], $font[1]);
             
             $this->setProperty ('Font', $obj);
         }
@@ -42,20 +42,20 @@ class Control extends Component
 	
     public function get_backgroundColor ()
     {
-        return $this->getProperty (['BackColor', 'color']);
+        return $this->getProperty (['BackColor', VC_COLOR]);
     }
 	
-    public function set_backgroundColor ($color)
+    public function set_backgroundColor ($color): void
     {
         $this->setProperty ('BackColor', $color);
     }
 	
     public function get_foregroundColor ()
     {
-        return $this->getProperty (['ForeColor', 'color']);
+        return $this->getProperty (['ForeColor', VC_COLOR]);
     }
 	
-    public function set_foregroundColor ($color)
+    public function set_foregroundColor ($color): void
     {
         $this->setProperty ('ForeColor', $color);
     }
@@ -65,7 +65,7 @@ class Control extends Component
         return $this->width;
     }
 	
-    public function set_w (int $w)
+    public function set_w (int $w): void
     {
         $this->width = $w;
     }
@@ -75,7 +75,7 @@ class Control extends Component
         return $this->height;
     }
 	
-    public function set_h (int $h)
+    public function set_h (int $h): void
     {
         $this->height = $h;
     }
@@ -85,7 +85,7 @@ class Control extends Component
         return $this->left;
     }
 	
-    public function set_x (int $x)
+    public function set_x (int $x): void
     {
         $this->left = $x;
     }
@@ -95,7 +95,7 @@ class Control extends Component
         return $this->top;
     }
 	
-    public function set_y (int $y)
+    public function set_y (int $y): void
     {
         $this->top = $y;
     }
@@ -110,7 +110,7 @@ class Control extends Component
         ];
     }
 	
-    public function set_bounds ($bounds)
+    public function set_bounds ($bounds): void
     {
         if (is_array ($bounds))
         {
@@ -154,7 +154,7 @@ class Control extends Component
         ];
     }
 	
-    public function set_size ($size)
+    public function set_size ($size): void
     {
         if (is_array ($size))
         {
@@ -167,30 +167,28 @@ class Control extends Component
         else $this->setProperty ('Size', EngineAdditions::uncoupleSelector ($size));
     }
 	
-    public function setBounds (int $x, int $y, int $w, int $h)
+    public function setBounds (int $x, int $y, int $w, int $h): void
     {
         $this->set_bounds ([$x, $y, $w, $h]);
     }
 	
-    public function setLocation (int $x, int $y)
+    public function setLocation (int $x, int $y): void
     {
         $this->set_location ([$x, $y]);
     }
 	
-    public function setSize (int $w, int $h)
+    public function setSize (int $w, int $h): void
     {
         $this->set_size ([$w, $h]);
     }
 	
-    public function toBack ()
+    public function toBack (): void
     {
         $this->callMethod ('SendToBack');
     }
 	
-    public function toFront ()
+    public function toFront (): void
     {
         $this->callMethod ('BringToFront');
     }
 }
-
-abstract class NoVisual extends Control {}

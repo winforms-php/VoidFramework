@@ -1,8 +1,11 @@
 <?php
 
-namespace VoidEngine;
+namespace VLF;
 
-class VLFInterpreter
+/**
+ * Интерпретатор AST VLF разметки
+ */
+class Interpreter
 {
     static array $objects = []; // Массив созданных объектов (название => объект)
 
@@ -10,212 +13,178 @@ class VLFInterpreter
     static bool $allow_multimethods_calls = true; // Можно ли использовать многоуровневые вызовы методов (->method1->method2)
 
     /**
-     * * Интерпретирование синтаксического дерева
-     * Выполняет то, что было сгенерировано парсером VLF кода
+     * Интерпретирование синтаксического дерева
      * 
-     * @param mixed $syntaxTree - Абстрактное Синтаксическое Дерево (АСД), сгенерированное VLFParser'ом, или сам VLFParser
-     * [@param string $resourceDir = null] - директория с ресурсами для импорта
+     * @param AST $tree - Абстрактное Синтаксическое Дерево (АСД), сгенерированное VLF Parser'ом
      * [@param array $parent = null] - нода-родитель дерева (системная настройка)
      * 
      * @return array - возвращает список созданных объектов
      */
-
-    public static function run ($syntaxTree, string $resourcesDir = null, array $parent = null): array
+    public static function run (AST $tree, Node $parent = null): array
     {
-        if ($syntaxTree instanceof VLFParser)
-            $syntaxTree = $syntaxTree->tree;
-
-        elseif (!is_array ($syntaxTree) && self::$throw_errors)
-            throw new \Exception ('$syntaxTree argument must be instance of VoidEngine\VLFParser or contains Abstract Syntax Tree - multi-dimensional array');
-
-        foreach ($syntaxTree as $id => $syntaxInfo)
-            if (isset ($syntaxInfo['type']))
+        foreach ($tree->getNodes () as $id => $node)
+        {
+            switch ($node->type)
             {
-                switch ($syntaxInfo['type'])
-                {
-                    case VLF_OBJECT_DEFINITION:
-                        $class = $syntaxInfo['info']['object_class'];
-                        $name  = $syntaxInfo['info']['object_name'];
-                        $args  = [];
+                case OBJECT_DEFINITION:
+                    $class = $node->args['class'];
+                    $name  = $node->args['name'];
+                    $args  = [];
 
-                        if (isset ($syntaxInfo['info']['arguments']))
-                        {
-                            $args = $syntaxInfo['info']['arguments'];
+                    if (isset (self::$objects[$name]))
+                        break;
 
-                            foreach ($args as $arg_id => $arg)
-                                if (is_object ($arg) && $arg instanceof VLFLink)
-                                    $args[$arg_id] = isset (self::$objects[$arg->name]) ?
-                                        self::formatLine ($arg->name, self::$objects) : null;
+                    if (isset ($node->args['args']))
+                    {
+                        $args = $node->args['args'];
 
-                                else $args[$arg_id] = self::formatLine ($arg, self::$objects);
-                        }
+                        foreach ($args as $arg_id => $arg)
+                            $args[$arg_id] = self::formatLine ($arg, self::$objects);
+                    }
+
+                    try
+                    {
+                        self::$objects[$name] = eval ("namespace VoidEngine; return new $class (". implode (', ', $args) .");");
 
                         try
                         {
-                            self::$objects[$name] = eval ("namespace VoidEngine; return new $class (". implode (', ', $args) .");");
+                            self::$objects[$name]->name = $name;
+                        }
 
-                            try
-                            {
-                                self::$objects[$name]->name = $name;
-                            }
+                        catch (\Throwable $e) {}
+                    }
 
-                            catch (\Throwable $e) {}
+                    catch (\Throwable $e)
+                    {
+                        if (self::$throw_errors)
+                            throw new \Exception ('Interpeter couldn\'t create object "'. $class .'" with name "'. $name .'" at line "'. $node->line .'". Exception info:'. "\n\n". (string) $e, 0, $e);
+                    }
+                break;
+
+                case PROPERTY_SET:
+                    if ($parent !== null)
+                    {
+                        $name = $parent->args['name'];
+
+                        $propertyName  = $node->args['name'];
+                        $propertyValue = $node->args['value'];
+                        $preset        = '';
+
+                        if (preg_match ('/function \((.*)\) use \((.*)\)/', $propertyValue))
+                        {
+                            $use = substr ($propertyValue, strpos ($propertyValue, 'use'));
+                            $use = $ouse = substr ($use, ($pos = strpos ($use, '(') + 1), strpos ($use, ')') - $pos);
+                            $use = explode (' ', $use);
+
+                            foreach ($use as $id => $useParam)  
+                                if (isset (self::$objects[$useParam]) && $use[$id + 1][0] == '$')
+                                {
+                                    $fname = $use[$id + 1];
+
+                                    if (substr ($fname, strlen ($fname) - 1) == ',')
+                                        $fname = substr ($fname, 0, -1);
+
+                                    $preset .= "$fname = $useParam; ";
+
+                                    unset ($use[$id]);
+                                }
+
+                            $preset        = self::formatLine ($preset, self::$objects);
+                            $propertyValue = self::formatLine (str_replace ($ouse, implode (' ', $use), $propertyValue), self::$objects);
+                        }
+
+                        else $propertyValue = self::formatLine ($propertyValue, self::$objects);
+
+                        try
+                        {
+                            self::$objects[$name]->$propertyName = eval ("namespace VoidEngine; $preset return $propertyValue;");
                         }
 
                         catch (\Throwable $e)
                         {
                             if (self::$throw_errors)
-                                throw new \Exception ('Interpeter couldn\'t create object "'. $class .'" with name "'. $name .'" at line "'. $syntaxInfo['line'] .'". Exception info:'. "\n\n". (string) $e, 0, $e);
+                                throw new \Exception ('Interpeter couldn\'t set property "'. $propertyName .'" with value "'. $propertyValue .'" at line "'. $node->line .'". Exception info:'. "\n\n". (string) $e, 0, $e);
                         }
-                    break;
-
-                    case VLF_SUBOBJECT_DEFINITION:
-                        self::$objects = self::run ((new VLFParser ($syntaxInfo['info']['object_vlf_info']))->tree, null, $syntaxInfo);
-                    break;
-
-                    case VLF_PROPERTY_SET:
-                        if (isset ($parent['info']['object_name']) && isset (self::$objects[$name = $parent['info']['object_name']]))
-                        {
-                            $propertyName  = $syntaxInfo['info']['property_name'];
-                            $propertyValue = $syntaxInfo['info']['property_value'];
-                            $preset        = '';
-
-                            if (is_object ($propertyValue) && $propertyValue instanceof VLFLink)
-                                $propertyValue = isset (self::$objects[$propertyValue->name]) ?
-                                    self::formatLine ($propertyValue->name, self::$objects) : null;
-
-                            elseif (preg_match ('/function \((.*)\) use \((.*)\)/', $propertyValue))
-                            {
-                                $use = substr ($propertyValue, strpos ($propertyValue, 'use'));
-                                $use = $ouse = substr ($use, ($pos = strpos ($use, '(') + 1), strpos ($use, ')') - $pos);
-                                $use = explode (' ', $use);
-
-                                foreach ($use as $id => $useParam)  
-                                    if (isset (self::$objects[$useParam]) && $use[$id + 1][0] == '$')
-                                    {
-                                        $fname = $use[$id + 1];
-
-                                        if (substr ($fname, strlen ($fname) - 1) == ',')
-                                            $fname = substr ($fname, 0, -1);
-
-                                        $preset .= "$fname = $useParam; ";
-
-                                        unset ($use[$id]);
-                                    }
-
-                                $preset        = self::formatLine ($preset, self::$objects);
-                                $propertyValue = self::formatLine (str_replace ($ouse, join (' ', $use), $propertyValue), self::$objects);
-                            }
-
-                            else $propertyValue = self::formatLine ($propertyValue, self::$objects);
-
-                            try
-                            {
-                                self::$objects[$name]->$propertyName = eval ("namespace VoidEngine; $preset return $propertyValue;");
-                            }
-
-                            catch (\Throwable $e)
-                            {
-                                try
-                                {
-                                    $propertyValue = $syntaxInfo['info']['property_raw_value'];
-
-                                    if (strpos ($propertyName, '->') !== false)
-                                        eval ('namespace VoidEngine; '. $preset .' _c('. self::$objects[$name]->selector .')->'. $propertyName .' = '. $propertyValue .';');
-
-                                    else self::$objects[$name]->$propertyName = eval ("namespace VoidEngine; $preset return $propertyValue;");
-                                }
-
-                                catch (\Throwable $e)
-                                {
-                                    if (self::$throw_errors)
-                                        throw new \Exception ('Interpeter couldn\'t set property "'. $propertyName .'" with value "'. $propertyValue .'" at line "'. $syntaxInfo['line'] .'". Exception info:'. "\n\n". (string) $e, 0, $e);
-                                }
-                            }
-                        }
-
-                        elseif (self::$throw_errors)
-                            throw new \Exception ('Setting property to an non-object at line "'. $syntaxInfo['line']);
-                    break;
-
-                    case VLF_METHOD_CALL:
-                        if (isset ($parent['info']['object_name']) && isset (self::$objects[$name = $parent['info']['object_name']]))
-                        {
-                            $methodName = $syntaxInfo['info']['method_name'];
-                            $methodArgs = $syntaxInfo['info']['method_arguments'];
-
-                            foreach ($methodArgs as $arg_id => $arg)
-                                if (is_object ($arg) && $arg instanceof VLFLink)
-                                    $methodArgs[$arg_id] = isset (self::$objects[$arg->name]) ?
-                                        self::formatLine ($arg->name, self::$objects) : null;
-
-                                else $methodArgs[$arg_id] = self::formatLine ($arg, self::$objects);
-
-                            try
-                            {
-                                if (strpos ($methodName, '->') !== false && self::$allow_multimethods_calls)
-                                    eval ('namespace VoidEngine; _c('. self::$objects[$name]->selector .')->'. $methodName .' ('. implode (', ', $methodArgs) .');');
-
-                                elseif (sizeof ($methodArgs) > 0)
-                                    self::$objects[$name]->$methodName (...eval ('namespace VoidEngine; return ['. implode (', ', $methodArgs) .'];'));
-
-                                else self::$objects[$name]->$methodName ();
-                            }
-
-                            catch (\Throwable $e)
-                            {
-                                if (self::$throw_errors)
-                                    throw new \Exception ('Interpeter couldn\'t call method "'. $methodName .'" with arguments '. json_encode ($methodArgs) .' at line "'. $syntaxInfo['line'] .'". Exception info:'. "\n\n". (string) $e, 0, $e);
-                            }
-                        }
-
-                        elseif (self::$throw_errors)
-                            throw new \Exception ('Calling method to an non-object at line "'. $syntaxInfo['line'] .'"');
-                    break;
-
-                    case VLF_RUNTIME_EXECUTABLE:
-                        eval (self::formatLine ($syntaxInfo['info']['code'], self::$objects));
-                    break;
-                }
-
-                if (isset ($syntaxInfo['syntax_nodes']) && sizeof ($syntaxInfo['syntax_nodes']) > 0)
-                    self::$objects = self::run ($syntaxInfo['syntax_nodes'], null, $syntaxInfo);
-            }
-
-            else throw new \Exception ('Catched unknown syntax node: "'. json_encode ($syntaxInfo) .'"');
-
-        if (is_dir ($resourcesDir))
-            foreach (glob ($resourcesDir .'/*.vrsf') as $id => $dir)
-            {
-                $baseName = basenameNoExt ($dir);
-                $info     = explode ('.', $baseName);
-
-                if (isset (self::$objects[$info[0]]))
-                {
-                    if (isset ($info[2]))
-                    {
-                        $collection = \VoidCore::getProperty (self::$objects[$info[0]]->selector, $info[1]);
-                        
-                        \VoidCore::callMethod ($collection, 'Add', [\VoidCore::importObject (base64_encode (file_get_contents ($dir))), 'object']);
                     }
-                    
-                    else \VoidCore::setProperty (self::$objects[$info[0]]->selector, $info[1], \VoidCore::importObject (base64_encode (file_get_contents ($dir))));
-                }
+
+                    elseif (self::$throw_errors)
+                        throw new \Exception ('Setting property to an non-object at line "'. $node->line);
+                break;
+
+                case METHOD_CALL:
+                    if ($parent !== null)
+                    {
+                        $name = $parent->args['name'];
+
+                        $methodName = $node->args['name'];
+                        $methodArgs = $node->args['args'];
+
+                        foreach ($methodArgs as $arg_id => $arg)
+                            $methodArgs[$arg_id] = self::formatLine ($arg, self::$objects);
+
+                        try
+                        {
+                            if (strpos ($methodName, '->') !== false && self::$allow_multimethods_calls)
+                                eval ('namespace VoidEngine; _c('. self::$objects[$name]->selector .')->'. $methodName .' ('. implode (', ', $methodArgs) .');');
+
+                            elseif (sizeof ($methodArgs) > 0)
+                                self::$objects[$name]->$methodName (...eval ('namespace VoidEngine; return ['. implode (', ', $methodArgs) .'];'));
+
+                            else self::$objects[$name]->$methodName ();
+                        }
+
+                        catch (\Throwable $e)
+                        {
+                            if (self::$throw_errors)
+                                throw new \Exception ('Interpeter couldn\'t call method "'. $methodName .'" with arguments '. json_encode ($methodArgs) .' at line "'. $node->line .'". Exception info:'. "\n\n". (string) $e, 0, $e);
+                        }
+                    }
+
+                    elseif (self::$throw_errors)
+                        throw new \Exception ('Calling method to an non-object at line "'. $node->line .'"');
+                break;
+
+                case STYLES_IMPORTING:
+                    foreach ($node->args['imports'] as $style)
+                    {
+                        $path = eval ('namespace VoidEngine; return '. self::formatLine ($style, self::$objects) .';');
+
+                        if (!file_exists ($path))
+                            throw new \Exception ('Trying to import nonexistent style at line "'. $node->line .'"');
+                        
+                        \VLF\VST\Interpreter::run (\VLF\VST\Parser::parse (file_get_contents ($path)));
+                    }
+                break;
+
+                case RUNTIME_EXECUTION:
+                    eval (self::formatLine ($node->args['code'], self::$objects));
+                break;
             }
+
+            $nodes = $node->getNodes ();
+
+            if (isset ($node->args['styles']))
+                foreach ($node->args['styles'] as $style)
+                    if (isset (\VLF\VST\Interpreter::$styles[$style]))
+                        $nodes = array_merge ($nodes, \VLF\VST\Interpreter::$styles[$style]);
+
+                    else throw new \Exception ('Trying to set undefined style to object at line "'. $node->line .'"');
+
+            self::$objects = self::run (new AST (array_map (
+                fn ($node) => $node->export (), $nodes)), $node);
+        }
 
         return self::$objects;
     }
 
     /**
-     * * Форматирование строки
-     * Необходимо для замены ссылок на объекты из человекочитаемого вида на PHP код
+     * Форматирование строки
      * 
      * @param string $line - строка для форматирования
      * [@param array $objects = []] - список объектов, которые будут участвовать в форматировании
      * 
      * @return string - возвращает форматированную строку
      */
-
     public static function formatLine (string $line, array $objects = []): string
     {
         if (sizeof ($objects) > 0)
@@ -225,7 +194,7 @@ class VLFInterpreter
 
             $replacement = array_map (function ($object)
             {
-                return Components::componentExists ($object->selector) !== false ? 
+                return \VoidEngine\Components::exists ($object->selector) !== false ? 
                     '\VoidEngine\_c('. $object->selector .')' :
                     'unserialize (\''. serialize ($object) .'\')';
             }, $objects);

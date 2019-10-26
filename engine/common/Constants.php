@@ -2,10 +2,10 @@
 
 namespace VoidEngine;
 
-$env 	= new WFClass ('System.Environment', 'mscorlib');
+$env 	= new NetClass ('System.Environment', 'mscorlib');
 $params = $env->getCommandLineArgs ()->list;
 
-$converter = new WFClass ('System.Drawing.ColorTranslator');
+$converter = new NetClass ('System.Drawing.ColorTranslator');
 
 $constants = [
 	# Информация об окружении

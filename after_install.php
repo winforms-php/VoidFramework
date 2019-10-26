@@ -24,7 +24,8 @@ $info = file_exists (QERO_DIR .'/qero-info.json') ?
 
 $info['scripts']['start'] = '"qero-packages/winforms-php/VoidFramework/core/VoidCore.exe" "app/start.php"';
 
-file_put_contents (QERO_DIR .'/qero-info.json', json_encode ($info, defined ('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0));
+file_put_contents (QERO_DIR .'/qero-info.json', json_encode ($info, defined ('JSON_PRETTY_PRINT') ?
+    constant ('JSON_PRETTY_PRINT') : 0));
 file_put_contents (QERO_DIR .'/start.bat', '@echo off
 '. $info['scripts']['start']);
 

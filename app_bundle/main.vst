@@ -1,0 +1,16 @@
+# Стили для app.vlf
+
+.mainForm
+    caption: 'Привет, Мир! 🙌'
+    size: [400, 300]
+    startPosition: fspCenterScreen
+
+    ClickEvent: fn ($self) => pre ($self->caption)
+
+.mainButton
+    caption: 'Click Me! 😈'
+
+    ClickEvent:^ function ($self) use (MainForm $form)
+        {
+            pre ('Oh, '. $self->caption .' was clicked from '. $form->caption .' 😓');
+        }

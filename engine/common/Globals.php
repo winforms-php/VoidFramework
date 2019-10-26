@@ -6,18 +6,18 @@ register_superglobals ('APPLICATION', 'SCREEN');
 
 $APPLICATION = new class
 {
-    public WFClass $application;
+    public NetClass $application;
     public string $executablePath;
     
     public function __construct ()
     {
-        $this->application    = new WFClass ('System.Windows.Forms.Application');
+        $this->application    = new NetClass ('System.Windows.Forms.Application');
         $this->executablePath = $this->application->executablePath;
     }
     
     public function run ($form = null): void
     {
-        if ($form instanceof WFObject)
+        if ($form instanceof NetObject)
             $this->application->run ($form->selector);
         
         elseif (is_int ($form) && \VoidCore::objectExists ($form))
@@ -26,7 +26,7 @@ $APPLICATION = new class
         elseif ($form === null)
             $this->application->run ();
 
-        else throw new \Exception ('$form param must be instance of "VoidEngine\WFObject" ("VoidEngine\Form"), be null or object selector');
+        else throw new \Exception ('$form param must be instance of "VoidEngine\NetObject" ("VoidEngine\Form"), be null or object selector');
     }
     
     public function restart (): void
@@ -53,11 +53,11 @@ $APPLICATION = new class
 
 $SCREEN = new class
 {
-    public WFObject $screen;
+    public NetClass $screen;
     
     public function __construct ()
     {
-        $this->screen = new WFClass ('System.Windows.Forms.Screen');
+        $this->screen = new NetClass ('System.Windows.Forms.Screen');
     }
     
     public function __get ($name)

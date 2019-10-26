@@ -2,19 +2,20 @@
 
 namespace VoidEngine;
 
+use VoidCore;
+
 class Events
 {
-    public static function setObjectEvent (int $object, string $eventName, callable $function)
+    public static function setEvent (int $selector, string $eventName, callable $function): void
     {
-        \VoidCore::setEvent ($object, $eventName, function ($sender, ...$args) use ($function)
+        VoidCore::setEvent ($selector, $eventName, function ($sender, ...$args) use ($function)
 		{
             try
 			{
                 foreach ($args as $id => $arg)
                     $args[$id] = EngineAdditions::coupleSelector ($arg);
                 
-                return $function (($e = _c($sender)) !== false ?
-                    $e : new WFObject ($sender), ...$args);
+                return $function (_c ($sender) ?: new NetObject ($sender), ...$args);
             }
             
 			catch (\Throwable $e)
@@ -31,8 +32,8 @@ class Events
         });
     }
 
-    public static function removeObjectEvent (int $object, string $eventName)
+    public static function removeEvent (int $selector, string $eventName): void
     {
-        \VoidCore::removeEvent ($object, $eventName);
+        VoidCore::removeEvent ($selector, $eventName);
     }
 }
