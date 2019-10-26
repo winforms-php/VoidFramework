@@ -13,7 +13,7 @@ function dn (...$args): NetObject
 
     catch (\WinformsException $e)
     {
-        if ((new NetObject ($e->getNetException ()))->toString () == 'System.MemberAccessException')
+        if (VoidCore::callMethod ($e->getNetException (), 'ToString') == 'System.MemberAccessException')
             throw $e;
         
         $object = new NetClass (...$args);

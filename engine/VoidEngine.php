@@ -15,7 +15,7 @@ namespace VoidEngine;
  * @see         license.txt for details
  * @author      Podvirnyy Nikita (KRypt0n_) & Andrey Kusov
  * 
- * @version     4.0.0dev
+ * @version     4.0.0dev1
  * 
  * Contacts:
  *
@@ -31,7 +31,7 @@ namespace VoidEngine;
 
 // https://www.php.net/manual/en/function.version-compare.php
 
-const ENGINE_VERSION = '4.0.0dev';
+const ENGINE_VERSION = '4.0.0dev1';
 const ENGINE_DIR = __DIR__;
 
 chdir (ENGINE_DIR);
