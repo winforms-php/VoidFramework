@@ -18,7 +18,7 @@ class Process extends Component
                 VoidCore::callMethod ($this->selector, 'GetCurrentProcess') :
                 VoidCore::callMethod ($this->selector, 'GetProcessById', $pid);
 
-		Components::addComponent ($this->selector, $this);
+		Components::add ($this);
 	}
 	
 	public static function getProcessById (int $pid)

@@ -1,3 +1,50 @@
-Form MainForm > mainForm
-    Button MainButton > mainButton
-        bounds: [8, 8, 120, 32]
+Form MainForm > form
+    clientSize: [500, 300]
+    caption: 'VoidFramework '. ENGINE_VERSION
+
+    PictureBox Logo
+        bounds: [48, 48, 70, 56]
+        sizeMode: smStretchImage
+
+        ->load (APP_DIR .'/images/Icon.png')
+
+    # Labels
+
+    Label Caption > label
+        caption: 'VoidFramework'
+
+        bounds: [134, 48, 400, 40]
+        font: ['Segoe UI', 24]
+
+    Label Version > label
+        caption: ENGINE_VERSION
+        foreColor: argb ('#7543E3')
+
+        bounds: [140, 88, 400, 16]
+        font: ['Segoe UI Semilight', 10]
+
+    Label Message > label
+        caption: 'With 🖤 from WinForms PHP'
+
+        bounds: [140, 128, 400, 48]
+        font: ['Segoe UI Semilight', 14]
+
+    # Buttons
+
+    Button Confirm > button
+        caption: 'Хорошо'
+        bounds: [48, MainForm->h - 88, 128, 40]
+
+        ClickEvent: fn () => $APPLICATION->exit ()
+
+    Button VK > buttonSecondary
+        caption: 'VK'
+        bounds: [Confirm->x + Confirm->w + 32, MainForm->h - 88, 56, 40]
+
+        ClickEvent: fn () => run ('https://vk.com/winforms')
+
+    Button GitHub > buttonSecondary
+        caption: 'GitHub'
+        bounds: [VK->x + VK->w + 8, MainForm->h - 88, 96, 40]
+
+        ClickEvent: fn () => run ('https://github.com/winforms-php')

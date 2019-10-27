@@ -1,16 +1,27 @@
-# Стили для app.vlf
-
-.mainForm
-    caption: 'Привет, Мир! 🙌'
-    size: [400, 300]
+.form
+    formBorderStyle: fbsNone
     startPosition: fspCenterScreen
+    backgroundColor: clWhite
 
-    ClickEvent: fn ($self) => pre ($self->caption)
+    icon: dn ('System.Drawing.Icon', false, APP_DIR .'/images/Icon.ico')
 
-.mainButton
-    caption: 'Click Me! 😈'
+.label
+    textAlign: alMiddleLeft
 
-    ClickEvent:^ function ($self) use (MainForm $form)
-        {
-            pre ('Oh, '. $self->caption .' was clicked from '. $form->caption .' 😓');
-        }
+.button
+    font: ['Segoe UI Bold', 10]
+    textAlign: alMiddleCenter
+
+    foreColor: clWhite
+    backColor: argb ('#0290EE')
+    flatStyle: flFlat
+    flatAppearance->borderColor: clWhite
+    flatAppearance->mouseOverBackColor: argb ('#0060E0')
+    flatAppearance->mouseDownBackColor: argb ('#0250BC')
+
+    cursor: dn ('System.Windows.Forms.Cursors')->hand
+
+    .buttonSecondary
+        backColor: argb ('#AC71FF')
+        flatAppearance->mouseOverBackColor: argb ('#9059FF')
+        flatAppearance->mouseDownBackColor: argb ('#7543E3')

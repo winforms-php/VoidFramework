@@ -41,7 +41,7 @@ class Interpreter extends \VLF\Interpreter
                         if (!isset (self::$styles[$parent]) && self::$throw_errors)
                             throw new \Exception ('Style "'. $parent .'" not founded');
 
-                        $nodes = array_merge ($nodes, self::$styles[$parent]);
+                        $nodes = array_merge (self::$styles[$parent], $nodes);
                     }
 
                 self::$styles[$name] = isset (self::$objects[$name]) ?

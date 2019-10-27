@@ -97,7 +97,10 @@ class Interpreter
 
                         try
                         {
-                            self::$objects[$name]->$propertyName = eval ("namespace VoidEngine; $preset return $propertyValue;");
+							if (strpos ($propertyName, '->') !== false && self::$allow_multimethods_calls)
+                                eval ('namespace VoidEngine; '. $preset .' _c('. self::$objects[$name]->selector .')->'. $propertyName .' = '. $propertyValue .';');
+                            
+                            else self::$objects[$name]->$propertyName = eval ("namespace VoidEngine; $preset return $propertyValue;");
                         }
 
                         catch (\Throwable $e)
