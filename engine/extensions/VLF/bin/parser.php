@@ -239,9 +239,9 @@ class Parser
                         self::parseArguments ($args) : [];
                 }
 
-                if (($end = strpos ($line, '>')) !== false)
+                if (($end = strrpos ($line, ' > ')) !== false)
                 {
-                    $styles = trim (substr ($line, $end + 1));
+                    $styles = trim (substr ($line, $end + 3));
 
                     if (strlen ($styles) == 0)
                         throw new \Exception ('Trying to set empty style to object');

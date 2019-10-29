@@ -13,6 +13,7 @@ use \VLF\{
 class Interpreter extends \VLF\Interpreter
 {
     static array $styles = []; // Массив созданных стилей (название => стиль)
+    static array $default_styles = []; // Массив дефолтных стилей
 
     static bool $throw_errors = true; // Выводить ли ошибки интерпретации
     static bool $allow_multimethods_calls = true; // Можно ли использовать многоуровневые вызовы методов (->method1->method2)
@@ -24,7 +25,7 @@ class Interpreter extends \VLF\Interpreter
      * @param AST $tree - Абстрактное Синтаксическое Дерево (АСД), сгенерированное VST Parser'ом
      * [@param array $parent = null] - нода-родитель дерева (системная настройка)
      * 
-     * @return array - возвращает список созданных объектов
+     * @return array - возвращает список созданных стилей
      */
     public static function run (AST $tree, Node $parent = null): array
     {
@@ -37,21 +38,26 @@ class Interpreter extends \VLF\Interpreter
 
                 if ($node->args['parents'] !== null)
                     foreach ($node->args['parents'] as $parent)
-                    {
-                        if (!isset (self::$styles[$parent]) && self::$throw_errors)
-                            throw new \Exception ('Style "'. $parent .'" not founded');
+                        if (!isset (self::$styles[$parent]) && !isset (self::$default_styles[$parent]))
+                        {
+                            if (self::$throw_errors)
+                                throw new \Exception ('Style "'. $parent .'" not founded');
+                        }
 
-                        $nodes = array_merge (self::$styles[$parent], $nodes);
-                    }
+                        else $nodes = array_merge (self::$styles[$parent] ?? self::$default_styles[$parent], $nodes);
 
-                self::$styles[$name] = isset (self::$objects[$name]) ?
+                if ($node->args['is_default'])
+                    self::$default_styles[$name] = isset (self::$objects[$name]) ?
+                        array_merge (self::$default_styles[$name], $nodes) : $nodes;
+
+                else self::$styles[$name] = isset (self::$objects[$name]) ?
                     array_merge (self::$styles[$name], $nodes) : $nodes;
             }
 
-            self::$styles = self::run (new AST (array_map (
+            list (self::$styles, self::$default_styles) = self::run (new AST (array_map (
                 fn ($node) => $node->export (), $node->getNodes ())), $node);
         }
 
-        return self::$styles;
+        return [self::$styles, self::$default_styles];
     }
 }

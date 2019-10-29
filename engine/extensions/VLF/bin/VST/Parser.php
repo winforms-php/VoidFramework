@@ -116,8 +116,53 @@ class Parser extends \VLF\Parser
                     'height' => $height,
 
                     'args' => [
-                        'name'    => $name,
-                        'parents' => $parents
+                        'name'       => $name,
+                        'parents'    => $parents,
+                        'is_default' => false
+                    ]
+                ]));
+
+                $tree->push ($objects->current ());
+            }
+
+            /**
+             * Создание стиля по умолчанию для класса
+             */
+            elseif ($words[0][0] == '*')
+            {
+                $pos     = strpos ($line, ':');
+                $parents = null;
+
+                if ($pos !== false)
+                {
+                    $name = trim (substr ($line, 1, $pos - 1));
+
+                    if (isset ($line[$pos]))
+                    {
+                        $parents = trim (substr ($line, $pos + 1));
+
+                        if (strlen ($parents) == 0)
+                            $parents = null;
+
+                        else $parents = array_map ('trim', explode (',', $parents));
+                    }
+                }
+
+                else $name = trim (substr ($line, 1));
+
+                if ($parents === null && $objects->size () > 0 && $objects->current ()->height < $height)
+                    $parents = [$objects->current ()->args['name']];
+
+                $objects->push (new Node ([
+                    'type'   => \VLF\STYLE_DEFINITION,
+                    'line'   => $line,
+                    'words'  => $words,
+                    'height' => $height,
+
+                    'args' => [
+                        'name'       => $name,
+                        'parents'    => $parents,
+                        'is_default' => true
                     ]
                 ]));
 

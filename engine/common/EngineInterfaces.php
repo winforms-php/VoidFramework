@@ -100,8 +100,8 @@ class NetObject implements \ArrayAccess
 
     public function __call (string $name, array $args)
     {
-        return EngineAdditions::coupleSelector ($this->callMethod ($name, array_map (
-            fn ($arg) => EngineAdditions::uncoupleSelector ($arg), $args)));
+        return EngineAdditions::coupleSelector ($this->callMethod ($name,
+            array_map ('VoidEngine\\EngineAdditions::uncoupleSelector', $args)));
     }
 
     # Управление VoidCore
@@ -223,13 +223,13 @@ class NetObject implements \ArrayAccess
 
 class NetClass extends NetObject
 {
-    public function __construct ($name, $assembly = false, ...$args)
+    public function __construct ($name, $assembly = false)
     {
         if (is_int ($name) && VoidCore::objectExists ($name))
             $this->selector = $name;
 
         elseif (is_string ($name))
-            $this->selector = VoidCore::getClass ($name, $assembly, ...$args);
+            $this->selector = VoidCore::getClass ($name, $assembly);
 
         else throw new \Exception ('Incorrect params passed');
     }

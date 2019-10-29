@@ -12,6 +12,8 @@ class Interpreter
     static bool $throw_errors = true; // Выводить ли ошибки интерпретации
     static bool $allow_multimethods_calls = true; // Можно ли использовать многоуровневые вызовы методов (->method1->method2)
 
+    private static array $imported_styles = [];
+
     /**
      * Интерпретирование синтаксического дерева
      * 
@@ -153,9 +155,17 @@ class Interpreter
                         $path = eval ('namespace VoidEngine; return '. self::formatLine ($style, self::$objects) .';');
 
                         if (!file_exists ($path))
-                            throw new \Exception ('Trying to import nonexistent style at line "'. $node->line .'"');
+                        {
+                            if (self::$throw_errors)
+                                throw new \Exception ('Trying to import nonexistent style at line "'. $node->line .'"');
+                        }
                         
-                        \VLF\VST\Interpreter::run (\VLF\VST\Parser::parse (file_get_contents ($path)));
+                        elseif (!isset (self::$imported_styles[$path]))
+                        {
+                            \VLF\VST\Interpreter::run (\VLF\VST\Parser::parse (file_get_contents ($path)));
+
+                            self::$imported_styles[$path] = true;
+                        }
                     }
                 break;
 
@@ -166,12 +176,19 @@ class Interpreter
 
             $nodes = $node->getNodes ();
 
-            if (isset ($node->args['styles']))
-                foreach ($node->args['styles'] as $style)
-                    if (isset (\VLF\VST\Interpreter::$styles[$style]))
-                        $nodes = array_merge ($nodes, \VLF\VST\Interpreter::$styles[$style]);
+            if ($node->type == OBJECT_DEFINITION)
+            {
+                if (isset (\VLF\VST\Interpreter::$default_styles[$node->args['class']]))
+                    $nodes = array_merge ($nodes, \VLF\VST\Interpreter::$default_styles[$node->args['class']]);
 
-                    else throw new \Exception ('Trying to set undefined style to object at line "'. $node->line .'"');
+                if (isset ($node->args['styles']))
+                    foreach ($node->args['styles'] as $style)
+                        if (isset (\VLF\VST\Interpreter::$styles[$style]))
+                            $nodes = array_merge ($nodes, \VLF\VST\Interpreter::$styles[$style]);
+
+                        elseif (self::$throw_errors)
+                            throw new \Exception ('Trying to set undefined style "'. $style .'" to object at line "'. $node->line .'"');
+            }
 
             self::$objects = self::run (new AST (array_map (
                 fn ($node) => $node->export (), $nodes)), $node);
