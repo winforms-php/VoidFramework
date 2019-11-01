@@ -1,9 +1,9 @@
 <h1 align="center">VoidFramework</h1>
 
 <p align="center">
-    <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/?branch=dev" target="_blank"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/quality-score.png?b=dev"></a>
-    <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/build-status/dev" target="_blank"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/build.png?b=dev"></a>
-    <a href="https://scrutinizer-ci.com/code-intelligence" target="_blank"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/code-intelligence.svg?b=dev"></a>
+    <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/?branch=master" target="_blank"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/quality-score.png?b=master"></a>
+    <a href="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/build-status/master" target="_blank"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/build.png?b=master"></a>
+    <a href="https://scrutinizer-ci.com/code-intelligence" target="_blank"><img src="https://scrutinizer-ci.com/g/winforms-php/VoidFramework/badges/code-intelligence.svg?b=master"></a>
     <a href="license.txt"><img src="https://img.shields.io/badge/license-GPL%20v3-blue.svg"></a>
 </p>
 
