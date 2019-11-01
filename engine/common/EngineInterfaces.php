@@ -7,7 +7,7 @@ use VoidCore;
 class NetObject implements \ArrayAccess
 {
     protected int $selector = 0;
-    // protected ?string $name = null;
+    protected ?string $name = null;
     // protected bool $isCollection = false;
 
     public function __construct ($name, $assembly = false, ...$args)
@@ -78,6 +78,18 @@ class NetObject implements \ArrayAccess
                 
                 return $names;
             break;
+			
+			case 'name':
+				try
+				{
+					return $this->getProperty ('Name');
+				}
+				
+				catch (\WinformsException $e)
+				{
+					return $this->name;
+				}
+			break;
         }
 
         if (method_exists ($this, $method = 'get_'. $name))
@@ -94,6 +106,19 @@ class NetObject implements \ArrayAccess
 
         elseif (method_exists ($this, $method = 'set_'. $name))
             $this->$method ($value);
+			
+		elseif (strtolower ($name) == 'name')
+		{
+			try
+			{
+				$this->setProperty ($name, $value);
+			}
+			
+			catch (\WinformsException $e)
+			{
+				$this->name = $value;
+			}
+		}
         
         else $this->setProperty ($name, EngineAdditions::uncoupleSelector ($value));
     }
