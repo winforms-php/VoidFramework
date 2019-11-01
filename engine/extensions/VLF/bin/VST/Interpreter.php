@@ -60,4 +60,10 @@ class Interpreter extends \VLF\Interpreter
 
         return [self::$styles, self::$default_styles];
     }
+	
+	public static function clear (): void
+	{
+		self::$styles = [];
+		self::$default_styles = [];
+	}
 }

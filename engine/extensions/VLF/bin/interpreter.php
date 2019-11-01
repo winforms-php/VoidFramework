@@ -258,4 +258,10 @@ class Interpreter
 
         return $line;
     }
+	
+	public static function clear (): void
+	{
+		self::$objects = [];
+		self::$imported_styles = [];
+	}
 }
