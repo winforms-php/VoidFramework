@@ -7,7 +7,7 @@ use VoidCore;
 class NetObject implements \ArrayAccess
 {
     protected int $selector = 0;
-    // protected ?string $name = null;
+    protected ?string $name = null;
     // protected bool $isCollection = false;
 
     public function __construct ($name, $assembly = false, ...$args)
@@ -78,6 +78,18 @@ class NetObject implements \ArrayAccess
                 
                 return $names;
             break;
+			
+			case 'name':
+				try
+				{
+					return $this->getProperty ('Name');
+				}
+				
+				catch (\WinformsException $e)
+				{
+					return $this->name;
+				}
+			break;
         }
 
         if (method_exists ($this, $method = 'get_'. $name))
@@ -94,14 +106,27 @@ class NetObject implements \ArrayAccess
 
         elseif (method_exists ($this, $method = 'set_'. $name))
             $this->$method ($value);
+			
+		elseif (strtolower ($name) == 'name')
+		{
+			try
+			{
+				$this->setProperty ($name, $value);
+			}
+			
+			catch (\WinformsException $e)
+			{
+				$this->name = $value;
+			}
+		}
         
         else $this->setProperty ($name, EngineAdditions::uncoupleSelector ($value));
     }
 
     public function __call (string $name, array $args)
     {
-        return EngineAdditions::coupleSelector ($this->callMethod ($name, array_map (
-            fn ($arg) => EngineAdditions::uncoupleSelector ($arg), $args)));
+        return EngineAdditions::coupleSelector ($this->callMethod ($name,
+            array_map ('VoidEngine\\EngineAdditions::uncoupleSelector', $args)));
     }
 
     # Управление VoidCore
@@ -223,13 +248,13 @@ class NetObject implements \ArrayAccess
 
 class NetClass extends NetObject
 {
-    public function __construct ($name, $assembly = false, ...$args)
+    public function __construct ($name, $assembly = false)
     {
         if (is_int ($name) && VoidCore::objectExists ($name))
             $this->selector = $name;
 
         elseif (is_string ($name))
-            $this->selector = VoidCore::getClass ($name, $assembly, ...$args);
+            $this->selector = VoidCore::getClass ($name, $assembly);
 
         else throw new \Exception ('Incorrect params passed');
     }
