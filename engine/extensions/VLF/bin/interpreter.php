@@ -24,7 +24,7 @@ class Interpreter
      */
     public static function run (AST $tree, Node $parent = null): array
     {
-        foreach ($tree->getNodes () as $id => $node)
+        foreach ($tree->getNodes () as $node)
         {
             switch ($node->type)
             {
