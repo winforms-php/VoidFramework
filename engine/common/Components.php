@@ -55,7 +55,7 @@ function _c (int $selector): ?NetObject
 // TODO: поддержка многоуровневых ссылок вида родитель->родитель->объект
 function c (string $name): ?NetObject
 {
-    if (($object = _c($name)) !== null)
+    if (is_int ($name) && ($object = _c($name)) !== null)
         return $object;
 
     foreach (Components::getObjects () as $selector => $reference)
