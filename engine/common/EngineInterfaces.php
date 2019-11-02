@@ -262,6 +262,66 @@ class NetClass extends NetObject
 
 class EngineAdditions
 {
+	/**
+     * * Компиляция PHP кода
+     * 
+     * TODO: дополнить описание
+     * 
+     * @param string $savePath - путь для компиляции
+     * @param string $iconPath - путь до иконки
+     * @param string $phpCode - код для компиляции без тэгов
+     * 
+     * [@param string $productDescription = null] - описание приложения
+     * [@param string $productName = null]        - название приложения
+     * [@param string $productVersion = null]     - версия приложения
+     * [@param string $companyName = null]        - компания-производителя
+     * [@param string $copyright = null]          - копирайт
+     * [@param string $callSharpCode = '']        - чистый C# код
+     * [@param string $declareSharpCode = '']     - C# код с объявлениями классов
+     * 
+     * @return array - возвращает список ошибок компиляции
+     */
+    public static function compile (string $savePath, string $iconPath, string $phpCode, string $productDescription = null, string $productName = null, string $productVersion = null, string $companyName = null, string $copyright = null, string $callSharpCode = '', string $declareSharpCode = '', NetObject $dictionary = null, NetObject $assemblies = null): array
+    {
+        if ($dictionary === null)
+            $dictionary = new NetObject ('System.Collections.Generic.Dictionary`2[System.String,System.String]', null);
+
+        if ($assemblies === null)
+            $assemblies = getNetArray ('System.String', []);
+
+        if ($productName === null)
+            $productName = basenameNoExt ($savePath);
+
+        if ($productDescription === null)
+            $productDescription = $productName;
+
+        if ($productVersion === null)
+            $productVersion = '1.0';
+
+        if ($companyName === null)
+            $companyName = 'Company N';
+
+        if ($copyright === null)
+            $copyright = $companyName .' copyright (c) '. date ('Y');
+
+        return (new NetClass ('WinForms_PHP.WFCompiler', null))->compile ($savePath, $iconPath, $phpCode, $productDescription, $productName, $productVersion, $companyName, $copyright, $callSharpCode, $declareSharpCode, $dictionary, $assemblies)->names;
+    }
+
+    public static function loadModule (string $path): bool
+    {
+        try
+        {
+            (new NetClass ('System.Reflection.Assembly', 'mscorlib'))->loadFrom ($path);
+        }
+
+        catch (\WinformsException $e)
+        {
+            return false;
+        }
+
+        return true;
+    }
+	
     public static function coupleSelector ($selector)
     {
         return is_int ($selector) && VoidCore::objectExists ($selector) ?
