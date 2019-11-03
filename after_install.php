@@ -8,7 +8,7 @@ function dir_copy (string $from, string $to): bool
         return false;
 
     if (!is_dir ($to))
-        dir_create ($to);
+        mkdir ($to);
 
     foreach (array_slice (scandir ($from), 2) as $file)
         if (is_dir ($f = $from .'/'. $file))
