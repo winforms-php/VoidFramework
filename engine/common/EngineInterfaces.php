@@ -95,22 +95,13 @@ class NetObject implements \ArrayAccess
         elseif (method_exists ($this, $method = 'set_'. $name))
             $this->$method ($value);
         
-        else $this->setProperty ($name, $this->formatArg ($value));
+        else $this->setProperty ($name, EngineAdditions::uncoupleSelector ($value));
     }
 
     public function __call (string $name, array $args)
     {
-        return EngineAdditions::coupleSelector ($this->callMethod ($name, array_map ([$this, 'formatArg'], $args)));
-    }
-
-    protected function formatArg ($item)
-    {
-        $item = EngineAdditions::uncoupleSelector ($item);
-
-        if (is_array ($item))
-            $item = EngineAdditions::uncoupleSelector (dnArray (VoidCore::callMethod (VoidCore::callMethod ([current ($item), VC_OBJECT], 'GetType')), 'ToString', $item));
-
-        return $item;
+        return EngineAdditions::coupleSelector ($this->callMethod ($name,
+            array_map ('VoidEngine\\EngineAdditions::uncoupleSelector', $args)));
     }
 
     # Управление VoidCore
