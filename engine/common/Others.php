@@ -40,7 +40,7 @@ function enum (string $baseType, string $value)
     }
 }
 
-function getNetArray (string $type, array $items = []): NetObject
+function dnArray (string $type, array $items = []): NetObject
 {
     $array = (new NetClass ('System.Array'))
         ->createInstance (VoidCore::typeof ($type), $size = sizeof ($items));

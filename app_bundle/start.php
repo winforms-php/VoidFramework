@@ -10,7 +10,8 @@ use VLF\{
 # Объявление констант
 const APP_DIR = __DIR__;
 
-define ('VoidEngine\CORE_DIR', dirname (__DIR__) .'/qero-packages/winforms-php/VoidFramework/core');
+define ('VoidEngine\CORE_DIR',
+	file_exists ($dir = dirname (__DIR__) .'/qero-packages/winforms-php/VoidFramework/core') ? $dir : __DIR__);
 
 # Подгружаем PHP расширения
 foreach (glob (CORE_DIR .'/ext/php_*.dll') as $ext)

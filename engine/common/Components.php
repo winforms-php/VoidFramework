@@ -53,6 +53,7 @@ function _c (int $selector): ?NetObject
 }
 
 // TODO: поддержка многоуровневых ссылок вида родитель->родитель->объект
+// VoidCore::getPrevClass
 function c (string $name): ?NetObject
 {
     if (is_int ($name) && ($object = _c($name)) !== null)
@@ -71,7 +72,7 @@ function c (string $name): ?NetObject
                 return $object;
         }
 
-        catch (\WinformsException $e) {}
+        catch (\Throwable $e) {}
     }
 
     return null;

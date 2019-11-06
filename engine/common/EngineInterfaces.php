@@ -78,18 +78,6 @@ class NetObject implements \ArrayAccess
                 
                 return $names;
             break;
-			
-			case 'name':
-				try
-				{
-					return $this->getProperty ('Name');
-				}
-				
-				catch (\WinformsException $e)
-				{
-					return $this->name;
-				}
-			break;
         }
 
         if (method_exists ($this, $method = 'get_'. $name))
@@ -106,19 +94,6 @@ class NetObject implements \ArrayAccess
 
         elseif (method_exists ($this, $method = 'set_'. $name))
             $this->$method ($value);
-			
-		elseif (strtolower ($name) == 'name')
-		{
-			try
-			{
-				$this->setProperty ($name, $value);
-			}
-			
-			catch (\WinformsException $e)
-			{
-				$this->name = $value;
-			}
-		}
         
         else $this->setProperty ($name, EngineAdditions::uncoupleSelector ($value));
     }
@@ -287,7 +262,7 @@ class EngineAdditions
             $dictionary = new NetObject ('System.Collections.Generic.Dictionary`2[System.String,System.String]', null);
 
         if ($assemblies === null)
-            $assemblies = getNetArray ('System.String', []);
+            $assemblies = dnArray ('System.String', []);
 
         if ($productName === null)
             $productName = basenameNoExt ($savePath);
