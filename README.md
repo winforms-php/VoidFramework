@@ -20,7 +20,7 @@
 ## Установка (Qero)
 
 ```cmd
-php Qero.phar install winforms-php/VoidFramework
+php qero.phar i winforms-php/VoidFramework
 ```
 
 > Qero: [тык](https://github.com/KRypt0nn/Qero)
@@ -32,7 +32,7 @@ php Qero.phar install winforms-php/VoidFramework
 Для запуска приложения вы можете использовать команду
 
 ```cmd
-php Qero.phar start
+php qero.phar start
 ```
 
 запустить файл **start.bat** или создать какой-нибудь ярлык. Это не суть важно. Запуск приложения происходит через файл **%VoidFramework%/core/VoidCore.exe** с аргументом в виде пути к файлу точки входа *(подробнее в **start.bat**)*

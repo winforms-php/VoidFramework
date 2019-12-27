@@ -9,7 +9,7 @@ use function Qero\{
 
 global $package;
 
-echo color (' Configuring [yellow]VoidFramework[reset]...') . PHP_EOL;
+echo color ('   Configuring [yellow]VoidFramework[reset]...') . PHP_EOL;
 
 function dir_copy (string $from, string $to): bool
 {
@@ -35,7 +35,7 @@ file_put_contents (QERO_DIR .'/start.bat', '@echo off
 
 if (!file_exists (QERO_DIR .'/app'))
 {
-    echo ' Configuring application...'. PHP_EOL;
+    echo '   Configuring application...'. PHP_EOL;
 
     mkdir (QERO_DIR .'/app');
     dir_copy (__DIR__ .'/app_bundle', QERO_DIR .'/app');
@@ -44,5 +44,5 @@ if (!file_exists (QERO_DIR .'/app'))
 dir_delete (__DIR__ .'/app_bundle');
 unlink (__FILE__);
 
-echo PHP_EOL . color (' [green]Configuration completed[reset]'. PHP_EOL .
-                      ' Thank for installing [yellow]winforms-php/VoidFramework[reset]!') . PHP_EOL;
+echo PHP_EOL . color ('   [green]Configuration completed[reset]'. PHP_EOL .
+                      '   Thank for installing [yellow]winforms-php/VoidFramework[reset]!') . PHP_EOL . PHP_EOL;
