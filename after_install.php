@@ -1,6 +1,15 @@
 <?php
 
-echo '    Configuring VoidFramework...'. PHP_EOL;
+use const Qero\QERO_DIR;
+
+use function Qero\{
+    dir_delete,
+    color
+};
+
+global $package;
+
+echo color (' Configuring [yellow]VoidFramework[reset]...') . PHP_EOL;
 
 function dir_copy (string $from, string $to): bool
 {
@@ -19,26 +28,21 @@ function dir_copy (string $from, string $to): bool
     return true;
 }
 
-$info = file_exists (QERO_DIR .'/qero-info.json') ?
-    json_decode (file_get_contents (QERO_DIR .'/qero-info.json'), true) : array ();
+$package->scripts['start'] = '"qero-packages/winforms-php/VoidFramework/core/VoidCore.exe" "app/start.php"';
 
-$info['scripts']['start'] = '"qero-packages/winforms-php/VoidFramework/core/VoidCore.exe" "app/start.php"';
-
-file_put_contents (QERO_DIR .'/qero-info.json', json_encode ($info, defined ('JSON_PRETTY_PRINT') ?
-    constant ('JSON_PRETTY_PRINT') : 0));
 file_put_contents (QERO_DIR .'/start.bat', '@echo off
-'. $info['scripts']['start']);
+'. $package->scripts['start']);
 
-if (!is_dir (QERO_DIR .'/app'))
+if (!file_exists (QERO_DIR .'/app'))
 {
-    echo '    Configuring application...'. PHP_EOL;
+    echo ' Configuring application...'. PHP_EOL;
 
     mkdir (QERO_DIR .'/app');
     dir_copy (__DIR__ .'/app_bundle', QERO_DIR .'/app');
 }
 
-Qero\dir_delete (__DIR__ .'/app_bundle');
+dir_delete (__DIR__ .'/app_bundle');
 unlink (__FILE__);
 
-echo '    Configuration completed'. PHP_EOL .
-     '    Thank for installing winforms-php/VoidFramework!'. PHP_EOL . PHP_EOL;
+echo PHP_EOL . color (' [green]Configuration completed[reset]'. PHP_EOL .
+                      ' Thank for installing [yellow]winforms-php/VoidFramework[reset]!') . PHP_EOL;
