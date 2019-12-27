@@ -7,7 +7,7 @@ use function Qero\{
     color
 };
 
-global $package;
+global $index_package;
 
 echo color ('   Configuring [yellow]VoidFramework[reset]...') . PHP_EOL;
 
@@ -28,10 +28,10 @@ function dir_copy (string $from, string $to): bool
     return true;
 }
 
-$package->scripts['start'] = '"qero-packages/winforms-php/VoidFramework/core/VoidCore.exe" "app/start.php"';
+$index_package->scripts['start'] = '"qero-packages/winforms-php/VoidFramework/core/VoidCore.exe" "app/start.php"';
 
 file_put_contents (QERO_DIR .'/start.bat', '@echo off
-'. $package->scripts['start']);
+'. $index_package->scripts['start']);
 
 if (!file_exists (QERO_DIR .'/app'))
 {
